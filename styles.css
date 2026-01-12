@@ -1,3 +1,146 @@
-body {
+/* =========================
+   Glitter Profile CSS
+   ========================= */
+
+/* ---------- Global Reset & Body ---------- */
+body, html {
+    margin: 0;
+    padding: 0;
     font-family: Arial, sans-serif;
+    background-image: url('glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-repeat: repeat;
+    background-size: auto;
+    background-attachment: fixed;
+    color: #222;
+}
+
+/* ----------------------
+   Semi-Transparent Navbar
+   ---------------------- */
+.navbar {
+    background: rgba(255, 105, 180, 0.4); /* semi-transparent pink */
+    color: #fff;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 1.25rem;
+    text-align: center;
+    backdrop-filter: blur(4px);
+}
+.navbar a {
+    color: #fff;
+    margin: 0 8px;
+    text-decoration: none;
+    font-size: 1rem;
+}
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* -------
+   Centering
+   ------- */
+.page-wrapper {
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: flex-start; /* start from top */
+    min-height: 100vh;       /* fill viewport */
+    padding-top: 30px;       /* space from top nav */
+    box-sizing: border-box;
+}
+
+/* ----------------------
+   Layout Columns
+   ---------------------- */
+.container {
+    width: 100%;
+    max-width: 1100px; /* wider content */
+    display: flex;
+    gap: 24px;
+}
+
+/* ----------------------
+   Sidebar & Main Panels
+   ---------------------- */
+.sidebar,
+.main {
+    background: rgba(255,255,255,0.35); /* semi-transparent panels */
+    border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 0 10px rgba(0,0,0,0.25);
+    padding: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 320px;
+}
+.sidebar img {
+    width: 100%;
+    border: 3px solid #888;
+    box-shadow: 0 0 10px rgba(0,0,0,0.25);
+    margin-bottom: 18px;
+}
+.sidebar h2 {
+    margin: 8px 0 12px;
+    font-size: 1.5rem;
+}
+.status {
+    margin: 6px 0;
+    font-size: 1rem;
+}
+.online {
+    color: green;
+    font-weight: bold;
+}
+.contact-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 12px;
+    font-size: 1rem;
+}
+.contact-list li {
+    margin: 6px 0;
+}
+.contact-list a {
+    color: #0066cc;
+    text-decoration: underline;
+}
+.contact-list a:hover {
+    color: #003399;
+}
+
+/* Main Content */
+.main {
+    flex-grow: 1;
+}
+.section-title {
+    background: rgba(255,255,255,0.35); /* transparent section headings */
+    padding: 10px;
+    font-weight: bold;
+    border-bottom: 2px solid rgba(0,0,0,0.25);
+    margin-bottom: 14px;
+    font-size: 1.3rem;
+}
+.profile-blurb {
+    background: rgba(255,255,255,0.30); /* transparent paragraphs */
+    padding: 14px;
+    border-radius: 4px;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin-bottom: 18px;
+    border: 2px dashed rgba(0,0,0,0.2);
+}
+
+/* ----------------------
+   Responsive Adjustments
+   ---------------------- */
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        gap: 14px;
+        width: 95%;
+        margin: auto;
+    }
+    .sidebar, .main {
+        width: 100%;
+    }
 }
