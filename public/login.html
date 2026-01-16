@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Log In</h2>
+  <form id="loginForm">
+    <input type="text" id="first" placeholder="First Name" required><br>
+    <input type="text" id="last" placeholder="Last Name" required><br>
+    <button type="submit">Log In</button>
+  </form>
+
+<script>
+document.getElementById("loginForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const first = document.getElementById("first").value;
+  const last = document.getElementById("last").value;
+
+  const res = await fetch("/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ first, last })
+  });
+  const data = await res.json();
+  if (data.success) window.location = data.profileUrl;
+};
+</script>
+
+</body>
+</html>

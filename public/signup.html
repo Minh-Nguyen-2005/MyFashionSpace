@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Sign Up</h2>
+  <form id="signupForm">
+    <input type="text" id="first" placeholder="First Name" required><br>
+    <input type="text" id="last" placeholder="Last Name" required><br>
+    <textarea id="about" placeholder="About me"></textarea><br>
+    <textarea id="interests" placeholder="Interests & Goals"></textarea><br>
+    <button type="submit">Sign Up</button>
+  </form>
+
+<script>
+document.getElementById("signupForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const first = document.getElementById("first").value;
+  const last = document.getElementById("last").value;
+  const about = document.getElementById("about").value;
+  const interests = document.getElementById("interests").value;
+
+  const res = await fetch("/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ first, last, about, interests })
+  });
+  const data = await res.json();
+  if (data.success) window.location = data.profileUrl;
+};
+</script>
+
+</body>
+</html>
