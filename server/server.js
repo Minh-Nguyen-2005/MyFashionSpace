@@ -6,7 +6,7 @@ const db = require("./db");
 
 const app = express();
 
-// Serve static files
+// Serve static files from public/
 app.use(express.static(path.join(__dirname, "../public")));
 
 // Middleware
@@ -18,11 +18,12 @@ app.use(session({
   saveUninitialized: true
 }));
 
-// Import and register routes
+// Register routes
 require("./routes")(app, db);
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));

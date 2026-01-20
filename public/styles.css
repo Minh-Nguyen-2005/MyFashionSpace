@@ -7,11 +7,150 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    background-color: #f7f2f6;
+    color: #222;
+    height: 100%;
+}
+
+/* Profile Page Background (change this image path) */
+body.profile-page {
     background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
     background-repeat: repeat;
     background-size: auto;
     background-attachment: fixed;
-    color: #222;
+}
+
+/* Home Page Background (change this image path) */
+html.home-page,
+body.home-page {
+    background-image: url('pictures/360_F_954279052_H2VR4h5Wx9nCMEb7FPnXVPcXurVdET2g.jpg');
+    /* background-repeat: no-repeat; */
+    background-position: center;
+    background-size: cover;
+    min-height: 100vh;
+    background-attachment: fixed;
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 2.25rem;
+}
+
+/* Log-in Page Background (change this image path) */
+body.login-page {
+    background-image: url('pictures/0b642f4fe2cdd25caf9694a0a98fc263.jpg');
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 2.25rem;
+}
+
+/* Sign-up Page Background (change this image path) */
+body.signup-page {
+    background-image: url('pictures/0b642f4fe2cdd25caf9694a0a98fc263.jpg');
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 2.25rem;
+}
+
+/* Friends Page Background (change this image path) */
+body.friends-page {
+    background-image: url('pictures/39781c49f058f6382e8b0a48ee1e8168.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    min-height: 100vh;
+    font-family: 'Snell Roundhand', cursive;
+
+}
+
+/* Home / Auth containers */
+.login-signup-container,
+.auth-card {
+    background: rgba(255,255,255,0.35);
+    border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 0 10px rgba(0,0,0,0.25);
+    padding: 20px;
+}
+.login-signup-container {
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+.login-signup-container {
+    max-width: 520px;
+    margin: 90px auto 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login-signup-container h1 {
+    color: #fff;
+}
+.welcome-subtitle {
+    color: #ffe6f2;
+    font-family: "Snell Roundhand", "Apple Chancery", "Brush Script MT", cursive;
+    font-size: 2rem;
+    letter-spacing: 0.5px;
+    margin-top: -28px;
+    text-shadow: 0 0 8px rgba(255, 95, 162, 0.6);
+}
+.login-signup-container .options {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 16px;
+}
+.login-signup-container button {
+    background: #ff5fa2;
+    color: #fff;
+    border: 2px solid #ff2e87;
+    padding: 12px 20px;
+    font-weight: normal;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.login-signup-container button:hover {
+    background: #ff2e87;
+}
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 40px;
+    box-sizing: border-box;
+}
+.login-page .auth-page {
+    align-items: center;
+    padding-top: 0;
+}
+.signup-page .auth-page {
+    align-items: center;
+    padding-top: 0;
+}
+.auth-card {
+    width: min(520px, 92%);
+}
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.auth-form input,
+.auth-form textarea {
+    padding: 8px;
+    border: 1px solid rgba(0,0,0,0.3);
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+}
+.auth-form button {
+    align-self: flex-start;
+    background: #ff5fa2;
+    color: #fff;
+    border: 2px solid #ff2e87;
+    padding: 8px 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.auth-form button:hover {
+    background: #ff2e87;
 }
 
 
@@ -155,6 +294,50 @@ body, html {
     color: #003399;
 }
 
+/* Add Friend button */
+.add-friend-btn {
+    background: #ff5fa2;
+    color: #fff;
+    border: 2px solid #ff2e87;
+    padding: 6px 12px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(255, 95, 162, 0.6);
+}
+.add-friend-btn:hover {
+    background: #ff2e87;
+}
+
+/* Friend picker */
+.friend-picker {
+    margin-top: 10px;
+    background: rgba(255,255,255,0.6);
+    border: 2px dashed rgba(0,0,0,0.2);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.friend-picker.hidden {
+    display: none;
+}
+.friend-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: rgba(255,255,255,0.8);
+    cursor: pointer;
+    text-align: left;
+}
+.friend-picker-row img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border: 1px solid rgba(0,0,0,0.25);
+}
+
 /* Main Content */
 .main {
     flex-grow: 1;
@@ -168,6 +351,11 @@ body, html {
     margin-bottom: 14px;
     font-size: 1.3rem;
 }
+
+/* Friends page title */
+.friends-page .section-title {
+    font-size: 1.7rem;
+}
 .profile-blurb {
     background: rgba(255,255,255,0.30);
     padding: 14px;
@@ -177,6 +365,62 @@ body, html {
     margin-bottom: 18px;
     border: 2px dashed rgba(0,0,0,0.2);
 }
+
+.posts-list p {
+    background: rgba(255,255,255,0.30);
+    padding: 12px;
+    border: 2px dashed rgba(0,0,0,0.2);
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+}
+
+/* Friends page */
+.friends-page-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.friends-page-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,0.45);
+    border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+.friends-page-card img {
+    width: 90px;
+    height: 110px;
+    object-fit: cover;
+    border: 2px solid rgba(0,0,0,0.25);
+}
+.friends-page-info {
+    flex: 1;
+}
+.friends-page-name {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+}
+.friends-page-link {
+    color: #0066cc;
+    text-decoration: underline;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+}
+.friends-page-remove {
+    background: #ff4d6d;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.friends-page-remove:hover {
+    background: #e13b5b;
+}
+
 
 /* Responsive */
 @media (max-width: 900px) {
