@@ -22,11 +22,31 @@
 
     <div class="page-wrapper">
         <div class="container">
-            <div class="main">
-                <div class="section-title">My Friends</div>
-                <div id="friends-list" class="friends-page-list">
-                    <p class="profile-blurb">Loading friends...</p>
+            <div class="main friends-page-columns">
+                <div class="friends-column">
+                    <div class="section-title friends-header">
+                        <span>My Friends</span>
+                        <button id="open-friend-picker" class="friends-page-add" type="button">Add Friend</button>
+                    </div>
+                    <div id="friends-list" class="friends-page-list">
+                        <p class="profile-blurb">Loading friends...</p>
+                    </div>
                 </div>
+                <div class="friends-column">
+                    <div class="section-title">Friend Requests</div>
+                    <div id="requests-list" class="friends-requests-list">
+                        <p class="profile-blurb">Loading requests...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="friend-picker-overlay" class="friend-picker-overlay hidden">
+        <div class="friend-picker-modal">
+            <div class="section-title">Add Friend</div>
+            <div id="friend-picker-list" class="friend-picker-list">
+                <p class="profile-blurb">Loading people...</p>
             </div>
         </div>
     </div>
@@ -34,46 +54,165 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
     const list = document.getElementById("friends-list");
-    const res = await fetch("/friends");
-    const friends = await res.json();
-    if (!res.ok) {
-        list.innerHTML = "<p class='profile-blurb'>Failed to load friends.</p>";
-        return;
-    }
-    list.innerHTML = "";
-    if (!friends || friends.length === 0) {
-        list.innerHTML = "<p class='profile-blurb'>No friends yet.</p>";
-        return;
-    }
-    friends.forEach(f => {
-        const card = document.createElement("div");
-        card.className = "friends-page-card";
-        card.innerHTML = `
-            <img src="${f.image || '/pictures/NGUYEN_MINH.jpg'}" alt="${f.first} ${f.last}">
-            <div class="friends-page-info">
-                <div class="friends-page-name">${f.first} ${f.last}</div>
-                <a class="friends-page-link" href="/profile.html?id=${f.id}">View Profile</a>
-            </div>
-            <button class="friends-page-remove" type="button">Delete Friend</button>
-        `;
-        card.querySelector(".friends-page-remove").addEventListener("click", async () => {
-            const resRemove = await fetch("/remove-friend", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ friendId: f.id })
-            });
-            const data = await resRemove.json();
-            if (resRemove.ok && data.success) {
-                card.remove();
-                if (!list.children.length) {
-                    list.innerHTML = "<p class='profile-blurb'>No friends yet.</p>";
+    const requestsList = document.getElementById("requests-list");
+    const pickerOverlay = document.getElementById("friend-picker-overlay");
+    const pickerList = document.getElementById("friend-picker-list");
+    const openPickerBtn = document.getElementById("open-friend-picker");
+
+    async function loadFriends() {
+        const res = await fetch("/friends");
+        const friends = await res.json();
+        if (!res.ok) {
+            list.innerHTML = "<p class='profile-blurb'>Failed to load friends.</p>";
+            return;
+        }
+        list.innerHTML = "";
+        if (!friends || friends.length === 0) {
+            list.innerHTML = "<p class='profile-blurb'>No friends yet.</p>";
+            return;
+        }
+        friends.forEach(f => {
+            const card = document.createElement("div");
+            card.className = "friends-page-card";
+            card.innerHTML = `
+                <img src="${f.image || '/pictures/NGUYEN_MINH.jpg'}" alt="${f.first} ${f.last}">
+                <div class="friends-page-info">
+                    <div class="friends-page-name">${f.first} ${f.last}</div>
+                    <a class="friends-page-link" href="/profile.html?id=${f.id}">View Profile</a>
+                </div>
+                <button class="friends-page-remove" type="button">Delete Friend</button>
+            `;
+            card.querySelector(".friends-page-remove").addEventListener("click", async () => {
+                const resRemove = await fetch("/remove-friend", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ friendId: f.id })
+                });
+                const data = await resRemove.json();
+                if (resRemove.ok && data.success) {
+                    loadFriends();
+                } else {
+                    alert(data.message || "Failed to remove friend.");
                 }
-            } else {
-                alert(data.message || "Failed to remove friend.");
-            }
+            });
+            list.appendChild(card);
         });
-        list.appendChild(card);
+    }
+
+    async function loadRequests() {
+        const res = await fetch("/friend-requests");
+        const requests = await res.json();
+        if (!res.ok) {
+            requestsList.innerHTML = "<p class='profile-blurb'>Failed to load requests.</p>";
+            return;
+        }
+        requestsList.innerHTML = "";
+        if (!requests || requests.length === 0) {
+            requestsList.innerHTML = "<p class='profile-blurb'>No friend requests.</p>";
+            return;
+        }
+        requests.forEach(r => {
+            const card = document.createElement("div");
+            card.className = "friends-request-card";
+            card.innerHTML = `
+                <img src="${r.image || '/pictures/NGUYEN_MINH.jpg'}" alt="${r.first} ${r.last}">
+                <div class="friends-page-info">
+                    <div class="friends-page-name">${r.first} ${r.last}</div>
+                </div>
+                <div class="friends-request-actions">
+                    <button class="friends-request-accept" type="button">Accept</button>
+                    <button class="friends-request-decline" type="button">Decline</button>
+                </div>
+            `;
+            card.querySelector(".friends-request-accept").addEventListener("click", async () => {
+                const resAccept = await fetch("/accept-friend", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ friendId: r.id })
+                });
+                const data = await resAccept.json();
+                if (resAccept.ok && data.success) {
+                    loadRequests();
+                    loadFriends();
+                } else {
+                    alert(data.message || "Failed to accept request.");
+                }
+            });
+            card.querySelector(".friends-request-decline").addEventListener("click", async () => {
+                const resDecline = await fetch("/decline-friend", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ friendId: r.id })
+                });
+                const data = await resDecline.json();
+                if (resDecline.ok && data.success) {
+                    loadRequests();
+                } else {
+                    alert(data.message || "Failed to decline request.");
+                }
+            });
+            requestsList.appendChild(card);
+        });
+    }
+
+    async function openPicker() {
+        pickerOverlay.classList.remove("hidden");
+        pickerList.innerHTML = "<p class='profile-blurb'>Loading people...</p>";
+        const res = await fetch("/people");
+        const people = await res.json();
+        if (!res.ok) {
+            pickerList.innerHTML = "<p class='profile-blurb'>Failed to load people.</p>";
+            return;
+        }
+        pickerList.innerHTML = "";
+        if (!people || people.length === 0) {
+            pickerList.innerHTML = "<p class='profile-blurb'>No people found.</p>";
+            return;
+        }
+        people.forEach(p => {
+            const row = document.createElement("button");
+            row.className = "friend-picker-row";
+            row.type = "button";
+            row.innerHTML = `
+                <img src="${p.image || '/pictures/NGUYEN_MINH.jpg'}" alt="${p.first} ${p.last}">
+                <span>${p.first} ${p.last}</span>
+                <span class="friend-picker-status">${p.relationship === 'friends' ? 'Friend' : p.relationship === 'pending_out' ? 'Requested' : p.relationship === 'pending_in' ? 'Requested You' : ''}</span>
+            `;
+            if (p.relationship !== "none") {
+                row.classList.add("picker-disabled");
+                row.disabled = true;
+            } else {
+                row.addEventListener("click", async () => {
+                    const resAdd = await fetch("/add-friend", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({ friendId: p.id })
+                    });
+                    const data = await resAdd.json();
+                    if (resAdd.ok && data.success) {
+                        loadRequests();
+                        loadFriends();
+                        openPicker();
+                    } else {
+                        alert(data.message || "Failed to add friend.");
+                    }
+                });
+            }
+            pickerList.appendChild(row);
+        });
+    }
+
+    openPickerBtn.addEventListener("click", () => {
+        openPicker();
     });
+    pickerOverlay.addEventListener("click", (e) => {
+        if (e.target === pickerOverlay) {
+            pickerOverlay.classList.add("hidden");
+        }
+    });
+
+    loadFriends();
+    loadRequests();
 });
 </script>
 

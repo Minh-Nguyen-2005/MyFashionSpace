@@ -62,78 +62,51 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!userId) return;
 
     // --- USER INFO ---
-    const resUser = await fetch(`/user/${userId}`);
+    const [resUser, resMe] = await Promise.all([
+        fetch(`/user/${userId}`),
+        fetch(`/me`)
+    ]);
     const user = await resUser.json();
+    const me = resMe.ok ? await resMe.json() : null;
 
     if (!user || !user.first) {
         document.getElementById("profile-sidebar").innerHTML = "<p>User not found</p>";
         return;
     }
 
+    const isMe = me && String(me.id) === String(userId);
+    const isOnline = isMe ? true : !!user.online;
     document.getElementById("profile-sidebar").innerHTML = `
         <img src="${user.image || 'pictures/NGUYEN_MINH.jpg'}" alt="${user.first} ${user.last}">
 
         <h2>${user.first} ${user.last}</h2>
         <p class="status">"${user.about || ''}"</p>
-        <p class="status online">ONLINE!</p>
+        <p class="status ${isOnline ? 'online' : 'offline'}">${isOnline ? 'ONLINE!' : 'OFFLINE'}</p>
         <ul class="contact-list">
             <li><a class="contact-button" href="mailto:${user.first}.${user.last}@dartmouth.edu">Send Email</a></li>
-            <li><button id="addFriendBtn" class="add-friend-btn contact-button" data-profile-id="${userId}">Add Friend</button></li>
+            ${isMe ? '' : `<li><button id="addFriendBtn" class="add-friend-btn contact-button" data-profile-id="${userId}">Add Friend</button></li>`}
             <li><a class="contact-button" href="#">Message</a></li>
         </ul>
-        <div id="friend-picker" class="friend-picker hidden"></div>
     `;
 
     // --- ADD FRIEND BUTTON LOGIC ---
-    async function openFriendPicker() {
-        const picker = document.getElementById("friend-picker");
-        picker.classList.remove("hidden");
-        picker.innerHTML = "<p>Loading profiles...</p>";
-
-        const res = await fetch("/users");
-        const users = await res.json();
-        if (!res.ok) {
-            picker.innerHTML = "<p>Failed to load profiles.</p>";
-            return;
-        }
-
-        if (!users || users.length === 0) {
-            picker.innerHTML = "<p>No other profiles yet.</p>";
-            return;
-        }
-
-        picker.innerHTML = "";
-        users.forEach(u => {
-            const row = document.createElement("button");
-            row.className = "friend-picker-row";
-            row.type = "button";
-            row.dataset.friendId = u.id;
-            row.innerHTML = `
-                <img src="${u.image || '/pictures/NGUYEN_MINH.jpg'}" alt="${u.first} ${u.last}">
-                <span>${u.first} ${u.last}</span>
-            `;
-            row.addEventListener("click", async () => {
-                const resAdd = await fetch("/add-friend", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({ friendId: u.id })
-                });
-                const data = await resAdd.json();
-                if (resAdd.ok && data.success) {
-                    picker.classList.add("hidden");
-                    picker.innerHTML = "";
-                    loadFriends();
-                } else {
-                    alert(data.message || "Failed to add friend.");
-                }
+    const addFriendBtn = document.getElementById("addFriendBtn");
+    if (addFriendBtn) {
+        addFriendBtn.addEventListener("click", async () => {
+            const profileId = addFriendBtn.dataset.profileId;
+            const res = await fetch("/add-friend", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ friendId: profileId })
             });
-            picker.appendChild(row);
+            const data = await res.json();
+            if (res.ok && data.success) {
+                alert("Friend request sent!");
+            } else {
+                alert(data.message || "Failed to add friend.");
+            }
         });
     }
-
-    document.getElementById("addFriendBtn").addEventListener("click", async () => {
-        openFriendPicker();
-    });
 
     // --- RENDER ABOUT / INTERESTS ---
     document.getElementById("about-section").textContent = user.about || "";

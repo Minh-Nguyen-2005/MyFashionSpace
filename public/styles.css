@@ -92,6 +92,11 @@ body.profile-page {
     font-size: 1.8rem;
     text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
 }
+.friends-page .section-title {
+    display: flex;
+    align-items: center;
+    min-height: 72px;
+}
 .friends-page .friends-page-name {
     font-family: 'Snell Roundhand', cursive;
     font-size: 1.2rem;
@@ -327,8 +332,17 @@ a.sale-queue:hover {
     align-items: center;
     padding-top: 0;
 }
+.signup-page h2 {
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
 .auth-card {
     width: min(520px, 92%);
+}
+.login-page .auth-card,
+.signup-page .auth-card {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 .auth-form {
     display: flex;
@@ -500,6 +514,16 @@ a.sale-queue:hover {
     color: green;
     font-weight: bold;
 }
+.profile-page .online {
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+.offline {
+    color: #ff4d6d;
+    font-weight: bold;
+}
+.profile-page .offline {
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
 .contact-list {
     list-style: none;
     padding-left: 0;
@@ -555,11 +579,47 @@ a.sale-queue:hover {
     cursor: pointer;
     text-align: left;
 }
+.friend-picker-row span {
+    text-shadow: none;
+}
+.friend-picker-row:hover span {
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
 .friend-picker-row img {
     width: 48px;
     height: 48px;
     object-fit: cover;
     border: 1px solid rgba(0,0,0,0.25);
+}
+.friend-picker-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+.friend-picker-modal {
+    width: min(520px, 90%);
+    background: rgba(0,0,0,0.45);
+    border: 2px solid #000;
+    box-shadow: 0 0 12px rgba(0,0,0,0.3);
+    padding: 16px;
+}
+.friend-picker-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.friend-picker-status {
+    margin-left: auto;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+.picker-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Main Content */
@@ -604,6 +664,71 @@ a.sale-queue:hover {
     flex-direction: column;
     gap: 12px;
 }
+.friends-page-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+}
+.friends-column {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.friends-page .container {
+    max-width: 1250px;
+}
+.friends-page-list,
+.friends-requests-list {
+    width: 100%;
+}
+.friends-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.friends-page-add {
+    padding: 10px 16px;
+    min-width: 130px;
+    font-size: 1.1rem;
+    text-align: center;
+    font-family: var(--button-font);
+}
+.friends-requests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.friends-request-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    background: rgba(0,0,0,0.35);
+    border: 2px solid #000;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    min-height: 137px;
+}
+.friends-request-card img {
+    width: 70px;
+    height: 90px;
+    object-fit: cover;
+    border: 2px solid rgba(0,0,0,0.25);
+}
+.friends-request-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+.friends-request-accept,
+.friends-request-decline {
+    padding: 10px 16px;
+    min-width: 110px;
+    font-size: 1.1rem;
+    text-align: center;
+    font-family: var(--button-font);
+}
 .friends-page-card {
     display: flex;
     align-items: center;
@@ -645,6 +770,7 @@ a.sale-queue:hover {
 .friends-page-remove {
     padding: 10px 16px;
     font-weight: normal;
+    font-size: 1.1rem;
 }
 .friends-page-remove:hover {
     transform: scale(1.06);
@@ -668,6 +794,9 @@ a.sale-queue:hover {
     height: 220px;
     object-fit: cover;
     border: 2px solid rgba(0,0,0,0.25);
+}
+.market-card:hover img {
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
 }
 .market-name {
     margin-top: 10px;
@@ -729,6 +858,9 @@ a.sale-queue:hover {
     object-fit: cover;
     border: 2px solid rgba(0,0,0,0.25);
 }
+.fashion-card:hover img {
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
+}
 .fashion-name {
     font-weight: bold;
     margin: 8px 0;
@@ -751,13 +883,13 @@ a.sale-queue:hover {
 }
 .fashion-view,
 .fashion-sell {
-    background: #fff;
-    border: 2px solid #ff2e87;
-    color: #ff2e87;
-    padding: 6px 10px;
+    padding: 10px 16px;
     cursor: pointer;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: normal;
+    min-width: 110px;
+    text-align: center;
+    font-size: 1.1rem;
 }
 .fashion-sell[disabled] {
     opacity: 0.6;
@@ -803,6 +935,13 @@ a.sale-queue:hover {
 .sale-page .sale-name {
     font-family: 'Snell Roundhand', cursive;
     font-size: 1.2rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+
+/* Queue page title styling */
+.queue-page .section-title {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.8rem;
     text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
 }
 .sale-queue {
@@ -888,6 +1027,11 @@ a.sale-queue:hover {
     gap: 10px;
     align-items: center;
 }
+.bid-box label {
+    font-family: 'Snell Roundhand', cursive;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+    font-size: 1.2rem;
+}
 .bid-box input {
     padding: 6px 8px;
     border: 1px solid rgba(0,0,0,0.3);
@@ -918,6 +1062,9 @@ a.sale-queue:hover {
     }
     .sidebar, .main {
         width: 100%;
+    }
+    .friends-page-columns {
+        grid-template-columns: 1fr;
     }
 }
 

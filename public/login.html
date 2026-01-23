@@ -14,7 +14,10 @@
         <input type="text" id="first" placeholder="First Name" required>
         <input type="text" id="last" placeholder="Last Name" required>
         <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Password (min 8 chars)" minlength="8" required>
+        <div class="auth-field">
+          <input type="password" id="password" placeholder="Password (min 8 chars)" minlength="8" required>
+          <button type="button" class="toggle-visibility" data-target="password" aria-label="Show password">👁</button>
+        </div>
         <button type="submit">Log In</button>
       </form>
     </div>
@@ -36,6 +39,12 @@ document.getElementById("loginForm").onsubmit = async (e) => {
   const data = await res.json();
   if (data.success) window.location = data.profileUrl;
 };
+
+document.querySelector(".toggle-visibility").addEventListener("click", () => {
+  const targetId = document.querySelector(".toggle-visibility").dataset.target;
+  const input = document.getElementById(targetId);
+  input.type = input.type === "password" ? "text" : "password";
+});
 </script>
 
 </body>

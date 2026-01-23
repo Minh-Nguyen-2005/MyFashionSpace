@@ -96,7 +96,7 @@ async function loadQueue() {
                 <img src="${bid.image || '/pictures/NGUYEN_MINH.jpg'}" alt="${bid.first} ${bid.last}">
                 <div class="queue-bidder">
                     <div class="queue-bidder-name">${bid.first} ${bid.last}</div>
-                    <div class="queue-bid">${Number(bid.bid_price).toFixed(2)}</div>
+                    <div class="queue-bid">$${Number(bid.bid_price).toFixed(2)}</div>
                 </div>
             `;
             if (me && String(me.id) === String(sale.seller_id)) {

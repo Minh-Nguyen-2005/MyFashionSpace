@@ -64,7 +64,10 @@ module.exports = function (app, db) {
         if (!row) return res.status(404).json({ success: false, message: "Invalid credentials" });
 
         req.session.userId = row.id;
-        res.json({ success: true, profileUrl: `/profile.html?id=${row.id}` });
+        db.run(`UPDATE users SET online = 1 WHERE id = ?`, [row.id], (updateErr) => {
+          if (updateErr) return res.status(500).json({ error: updateErr.message });
+          res.json({ success: true, profileUrl: `/profile.html?id=${row.id}` });
+        });
       }
     );
   });
@@ -105,7 +108,7 @@ module.exports = function (app, db) {
     }
 
     db.run(
-      `INSERT INTO users (first, last, about, interests, image, email, password) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO users (first, last, about, interests, image, email, password, online) VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
       [first, last, about, interests, imagePath, email, password],
       function (err) {
         if (err) return res.status(500).json({ error: err.message });
@@ -117,6 +120,20 @@ module.exports = function (app, db) {
         });
       }
     );
+  });
+
+  // LOGOUT
+  app.post("/logout", (req, res) => {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.json({ success: true });
+    }
+    db.run(`UPDATE users SET online = 0 WHERE id = ?`, [userId], (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+      req.session.destroy(() => {
+        res.json({ success: true });
+      });
+    });
   });
 
   // UPLOAD ITEM
@@ -383,12 +400,32 @@ module.exports = function (app, db) {
     if (String(userId) === String(friendId)) {
       return res.status(400).json({ success: false, message: "Cannot add yourself as a friend" });
     }
-    db.run(
-      `INSERT INTO friends (user_id, friend_id) VALUES (?, ?)`,
-      [userId, friendId],
-      function (err) {
+    db.get(
+      `
+      SELECT * FROM friends
+      WHERE (user_id = ? AND friend_id = ?)
+         OR (user_id = ? AND friend_id = ?)
+      `,
+      [userId, friendId, friendId, userId],
+      (err, existing) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json({ success: true });
+        if (existing) {
+          if (existing.status === "accepted") {
+            return res.status(400).json({ success: false, message: "Already friends" });
+          }
+          if (String(existing.user_id) === String(userId)) {
+            return res.status(400).json({ success: false, message: "Friend request already sent" });
+          }
+          return res.status(400).json({ success: false, message: "You already have a pending request from them" });
+        }
+        db.run(
+          `INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, 'pending')`,
+          [userId, friendId],
+          function (runErr) {
+            if (runErr) return res.status(500).json({ error: runErr.message });
+            res.json({ success: true });
+          }
+        );
       }
     );
   });
@@ -404,8 +441,12 @@ module.exports = function (app, db) {
       return res.status(400).json({ success: false, message: "Missing friendId" });
     }
     db.run(
-      `DELETE FROM friends WHERE user_id = ? AND friend_id = ?`,
-      [userId, friendId],
+      `
+      DELETE FROM friends
+      WHERE (user_id = ? AND friend_id = ?)
+         OR (user_id = ? AND friend_id = ?)
+      `,
+      [userId, friendId, friendId, userId],
       function (err) {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ success: true });
@@ -458,12 +499,16 @@ module.exports = function (app, db) {
   app.get("/friends/:id", (req, res) => {
     db.all(
       `
-      SELECT u.*
+      SELECT DISTINCT u.*
       FROM friends f
-      JOIN users u ON f.friend_id = u.id
-      WHERE f.user_id = ?
+      JOIN users u ON u.id = CASE
+        WHEN f.user_id = ? THEN f.friend_id
+        ELSE f.user_id
+      END
+      WHERE (f.user_id = ? OR f.friend_id = ?)
+        AND f.status = 'accepted'
       `,
-      [req.params.id],
+      [req.params.id, req.params.id, req.params.id],
       (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows || []);
@@ -479,15 +524,127 @@ module.exports = function (app, db) {
     }
     db.all(
       `
+      SELECT DISTINCT u.*
+      FROM friends f
+      JOIN users u ON u.id = CASE
+        WHEN f.user_id = ? THEN f.friend_id
+        ELSE f.user_id
+      END
+      WHERE (f.user_id = ? OR f.friend_id = ?)
+        AND f.status = 'accepted'
+      `,
+      [userId, userId, userId],
+      (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows || []);
+      }
+    );
+  });
+
+  // GET FRIEND REQUESTS FOR LOGGED-IN USER
+  app.get("/friend-requests", (req, res) => {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    db.all(
+      `
       SELECT u.*
       FROM friends f
-      JOIN users u ON f.friend_id = u.id
-      WHERE f.user_id = ?
+      JOIN users u ON u.id = f.user_id
+      WHERE f.friend_id = ? AND f.status = 'pending'
       `,
       [userId],
       (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows || []);
+      }
+    );
+  });
+
+  // ACCEPT FRIEND REQUEST
+  app.post("/accept-friend", (req, res) => {
+    const userId = req.session.userId;
+    const { friendId } = req.body;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    if (!friendId) {
+      return res.status(400).json({ success: false, message: "Missing friendId" });
+    }
+    db.run(
+      `
+      UPDATE friends
+      SET status = 'accepted'
+      WHERE user_id = ? AND friend_id = ? AND status = 'pending'
+      `,
+      [friendId, userId],
+      function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        db.run(
+          `DELETE FROM friends WHERE user_id = ? AND friend_id = ? AND status = 'pending'`,
+          [userId, friendId],
+          (cleanErr) => {
+            if (cleanErr) return res.status(500).json({ error: cleanErr.message });
+            res.json({ success: true });
+          }
+        );
+      }
+    );
+  });
+
+  // DECLINE FRIEND REQUEST
+  app.post("/decline-friend", (req, res) => {
+    const userId = req.session.userId;
+    const { friendId } = req.body;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    if (!friendId) {
+      return res.status(400).json({ success: false, message: "Missing friendId" });
+    }
+    db.run(
+      `DELETE FROM friends WHERE user_id = ? AND friend_id = ? AND status = 'pending'`,
+      [friendId, userId],
+      function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+      }
+    );
+  });
+
+  // LIST PEOPLE WITH RELATIONSHIP STATUS
+  app.get("/people", (req, res) => {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    db.all(
+      `
+      SELECT u.*, f.status, f.user_id AS from_id, f.friend_id AS to_id
+      FROM users u
+      LEFT JOIN friends f
+        ON ((f.user_id = ? AND f.friend_id = u.id)
+         OR (f.friend_id = ? AND f.user_id = u.id))
+      WHERE u.id != ?
+      ORDER BY u.id DESC
+      `,
+      [userId, userId, userId],
+      (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        const byId = new Map();
+        (rows || []).forEach((row) => {
+          const existing = byId.get(row.id);
+          const status = row.status
+            ? (row.status === "accepted"
+              ? "friends"
+              : (String(row.from_id) === String(userId) ? "pending_out" : "pending_in"))
+            : "none";
+          if (!existing || existing.relationship === "none") {
+            byId.set(row.id, { ...row, relationship: status });
+          }
+        });
+        res.json(Array.from(byId.values()));
       }
     );
   });
