@@ -9,6 +9,7 @@
     --accent-font: 'Snell Roundhand', cursive;
     --accent-color: #ff5fa2;
     --text-color: #222;
+    --button-font: 'Apple Chancery', cursive;
 }
 
 *,
@@ -29,16 +30,99 @@ body, html {
 /* Profile Page Background (change this image path) */
 html.profile-page,
 body.profile-page {
-    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-image: url('pictures/0f9e99cd92068622cd6f2508c0d83fb1.gif');
     background-repeat: repeat;
     background-size: auto;
     background-attachment: scroll;
 }
 
+/* Profile page: black borders + white text */
+.profile-page .sidebar,
+.profile-page .main,
+.profile-page .friends-box,
+.profile-page .section-title,
+.profile-page .profile-blurb,
+.profile-page .posts-list p {
+    border-color: #000;
+    color: #fff;
+    background: rgba(0,0,0,0.35);
+}
+.profile-page .contact-list a {
+    color: #fff;
+}
+.contact-button {
+    display: inline-block;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: #fff;
+    font-family: var(--button-font);
+    font-size: 1.1rem;
+}
+.contact-button:hover {
+    transform: scale(1.06);
+}
+.profile-page .contact-button {
+    background-image: url('pictures/1a0ca5723cb409294036416cbe390e7b.gif') !important;
+    background-size: cover;
+    background-position: center;
+    border: none !important;
+    background-color: transparent;
+}
+
+/* Profile page text styling */
+.profile-page .section-title {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.8rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+.profile-page .friends-title {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.8rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+.profile-page .sidebar h2 {
+    font-family: 'Snell Roundhand', cursive;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+
+/* Friends page text styling */
+.friends-page .section-title,
+.friends-page .friends-title {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.8rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+.friends-page .friends-page-name {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.2rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+
+/* All pages: black boxes + white text with translucent look */
+.login-signup-container,
+.auth-card,
+.sidebar,
+.main,
+.friends-box,
+.section-title,
+.profile-blurb,
+.posts-list p,
+.market-card,
+.fashion-card,
+.sale-card,
+.friends-page-card,
+.queue-card,
+.queue-row,
+.bid-box {
+    border-color: #000 !important;
+    color: #fff !important;
+    background: rgba(0,0,0,0.35) !important;
+}
+
 /* Home Page Background (change this image path) */
 html.home-page,
 body.home-page {
-    background-image: url('pictures/360_F_954279052_H2VR4h5Wx9nCMEb7FPnXVPcXurVdET2g.jpg');
+    background-image: url('pictures/glitter12.gif');
     background-repeat: repeat;
     background-position: top left;
     background-size: auto;
@@ -51,7 +135,7 @@ body.home-page {
 /* Log-in Page Background (change this image path) */
 html.login-page,
 body.login-page {
-    background-image: url('pictures/0b642f4fe2cdd25caf9694a0a98fc263.jpg');
+    background-image: url('pictures/glitter14.gif');
     font-family: 'Snell Roundhand', cursive;
     font-size: 2.25rem;
     background-repeat: repeat;
@@ -61,7 +145,7 @@ body.login-page {
 /* Sign-up Page Background (change this image path) */
 html.signup-page,
 body.signup-page {
-    background-image: url('pictures/0b642f4fe2cdd25caf9694a0a98fc263.jpg');
+    background-image: url('pictures/glitter14.gif');
     font-family: 'Snell Roundhand', cursive;
     font-size: 2.25rem;
     background-repeat: repeat;
@@ -71,7 +155,7 @@ body.signup-page {
 /* Shopping Page Background (change this image path) */
 html.shopping-page,
 body.shopping-page {
-    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-image: url('pictures/d2136938f87e26cb5716efd59ab1012e.gif');
     background-repeat: repeat;
     background-position: top left;
     background-size: auto;
@@ -81,7 +165,7 @@ body.shopping-page {
 /* Fashion Page Background (change this image path) */
 html.fashion-page,
 body.fashion-page {
-    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-image: url('pictures/3703891tuiwgbkg7n.gif');
     background-repeat: repeat;
     background-position: top left;
     background-size: auto;
@@ -91,7 +175,7 @@ body.fashion-page {
 /* Upload Page Background (change this image path) */
 html.upload-page,
 body.upload-page {
-    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-image: url('pictures/glitter9.gif');
     background-repeat: repeat;
     background-position: top left;
     background-size: auto;
@@ -101,7 +185,7 @@ body.upload-page {
 /* Sale Page Background (change this image path) */
 html.sale-page,
 body.sale-page {
-    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-image: url('pictures/glitter7.gif');
     background-repeat: repeat;
     background-position: top left;
     background-size: auto;
@@ -111,7 +195,7 @@ body.sale-page {
 /* Queue Page Background (change this image path) */
 html.queue-page,
 body.queue-page {
-    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-image: url('pictures/glitter10.gif');
     background-repeat: repeat;
     background-position: top left;
     background-size: auto;
@@ -121,7 +205,7 @@ body.queue-page {
 /* Friends Page Background (change this image path) */
 html.friends-page,
 body.friends-page {
-    background-image: url('pictures/39781c49f058f6382e8b0a48ee1e8168.jpg');
+    background-image: url('pictures/glitter11.gif');
     background-repeat: repeat;
     background-position: top left;
     background-size: auto;
@@ -151,8 +235,14 @@ body.friends-page {
     flex-direction: column;
     align-items: center;
 }
+.home-page .login-signup-container {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
 .login-signup-container h1 {
     color: #fff;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
 }
 .welcome-subtitle {
     color: #ffe6f2;
@@ -169,16 +259,54 @@ body.friends-page {
     margin-top: 16px;
 }
 .login-signup-container button {
-    background: #ff5fa2;
-    color: #fff;
-    border: 2px solid #ff2e87;
     padding: 12px 20px;
     font-weight: normal;
     font-size: 1.1rem;
     cursor: pointer;
 }
 .login-signup-container button:hover {
-    background: #ff2e87;
+    transform: scale(1.06);
+}
+
+/* Global button look */
+button,
+.fashion-action,
+.fashion-view,
+.fashion-sell,
+.sale-queue,
+.friends-page-remove,
+.queue-accept,
+.bid-box button,
+.add-friend-btn,
+.friend-picker-row,
+a.fashion-action,
+a.fashion-view,
+a.sale-queue {
+    background-image: url('pictures/1a0ca5723cb409294036416cbe390e7b.gif');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 16px;
+}
+
+button:hover,
+.fashion-action:hover,
+.fashion-view:hover,
+.fashion-sell:hover,
+.sale-queue:hover,
+.friends-page-remove:hover,
+.queue-accept:hover,
+.bid-box button:hover,
+.add-friend-btn:hover,
+.friend-picker-row:hover,
+a.fashion-action:hover,
+a.fashion-view:hover,
+a.sale-queue:hover {
+    transform: scale(1.06);
 }
 .auth-page {
     display: flex;
@@ -191,6 +319,9 @@ body.friends-page {
 .login-page .auth-page {
     align-items: center;
     padding-top: 0;
+}
+.login-page h2 {
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
 }
 .signup-page .auth-page {
     align-items: center;
@@ -232,15 +363,17 @@ body.friends-page {
 }
 .auth-form button {
     align-self: flex-start;
-    background: #ff5fa2;
+    background-image: url('pictures/1a0ca5723cb409294036416cbe390e7b.gif');
+    background-size: cover;
+    background-position: center;
     color: #fff;
-    border: 2px solid #ff2e87;
+    border: none;
     padding: 8px 14px;
     font-weight: bold;
     cursor: pointer;
 }
 .auth-form button:hover {
-    background: #ff2e87;
+    transform: scale(1.06);
 }
 
 
@@ -377,11 +510,11 @@ body.friends-page {
     margin: 6px 0;
 }
 .contact-list a {
-    color: #0066cc;
-    text-decoration: underline;
+    color: inherit;
+    text-decoration: none;
 }
 .contact-list a:hover {
-    color: #003399;
+    color: inherit;
 }
 
 /* Add Friend button */
@@ -401,8 +534,9 @@ body.friends-page {
 /* Friend picker */
 .friend-picker {
     margin-top: 10px;
-    background: rgba(255,255,255,0.6);
-    border: 2px dashed rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.35);
+    border: 2px solid #000;
+    box-shadow: 0 0 8px rgba(0,0,0,0.25);
     padding: 8px;
     display: flex;
     flex-direction: column;
@@ -416,8 +550,8 @@ body.friends-page {
     align-items: center;
     gap: 10px;
     padding: 6px 8px;
-    border: 1px solid rgba(0,0,0,0.2);
-    background: rgba(255,255,255,0.8);
+    border: 2px solid #000;
+    background: rgba(0,0,0,0.35);
     cursor: pointer;
     text-align: left;
 }
@@ -494,21 +628,26 @@ body.friends-page {
     margin-bottom: 6px;
 }
 .friends-page-link {
-    color: #0066cc;
-    text-decoration: underline;
-    font-family: Arial, sans-serif;
+    color: #fff !important;
+    text-decoration: none !important;
+    font-family: var(--button-font);
     font-weight: normal;
+    display: inline-block;
+    padding: 10px 16px;
+    background-image: url('pictures/1a0ca5723cb409294036416cbe390e7b.gif');
+    background-size: cover;
+    background-position: center;
+    border: none;
+}
+.friends-page-link:hover {
+    transform: scale(1.06);
 }
 .friends-page-remove {
-    background: #ff4d6d;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-weight: bold;
+    padding: 10px 16px;
+    font-weight: normal;
 }
 .friends-page-remove:hover {
-    background: #e13b5b;
+    transform: scale(1.06);
 }
 
 /* Shopping page */
@@ -537,6 +676,18 @@ body.friends-page {
 .market-price {
     color: #c2185b;
     font-weight: bold;
+}
+
+/* Shopping page text styling */
+.shopping-page .section-title {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.8rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+.shopping-page .market-name {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.2rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
 }
 .market-image-link {
     display: block;
@@ -581,6 +732,18 @@ body.friends-page {
 .fashion-name {
     font-weight: bold;
     margin: 8px 0;
+}
+
+/* Fashion page text styling */
+.fashion-page .section-title {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.8rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+.fashion-page .fashion-name {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.2rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
 }
 .fashion-buttons {
     display: flex;
@@ -632,6 +795,16 @@ body.friends-page {
     color: #c2185b;
     font-weight: bold;
 }
+.sale-page .section-title {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.8rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
+.sale-page .sale-name {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.2rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
 .sale-queue {
     background: var(--accent-color);
     color: #fff;
@@ -660,6 +833,9 @@ body.friends-page {
 }
 .queue-name {
     font-weight: bold;
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.3rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
 }
 .queue-price {
     color: #c2185b;
@@ -687,6 +863,11 @@ body.friends-page {
 .queue-bidder {
     flex: 1;
 }
+.queue-bidder-name {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.2rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+}
 .queue-bid {
     font-weight: bold;
 }
@@ -712,15 +893,18 @@ body.friends-page {
     border: 1px solid rgba(0,0,0,0.3);
 }
 .bid-box button {
-    background: var(--accent-color);
-    color: #fff;
-    border: 2px solid #ff2e87;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-weight: bold;
+    padding: 10px 16px;
+    font-weight: normal;
 }
 .hidden {
     display: none;
+}
+
+/* Upload page text styling */
+.upload-page .section-title {
+    font-family: 'Snell Roundhand', cursive;
+    font-size: 1.8rem;
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
 }
 
 
@@ -821,4 +1005,20 @@ body.friends-page {
     .login-signup-container {
         margin-top: 60px;
     }
+}
+.login-signup-container button,
+.auth-form button,
+.fashion-action,
+.fashion-view,
+.fashion-sell,
+.sale-queue,
+.friends-page-remove,
+.queue-accept,
+.bid-box button,
+.add-friend-btn,
+.friend-picker-row,
+.market-card button,
+.sale-card button,
+.friends-page-card button {
+    font-family: var(--button-font);
 }

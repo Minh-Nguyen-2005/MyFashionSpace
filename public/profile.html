@@ -77,9 +77,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         <p class="status">"${user.about || ''}"</p>
         <p class="status online">ONLINE!</p>
         <ul class="contact-list">
-            <li><a href="mailto:${user.first}.${user.last}@dartmouth.edu">Send Email</a></li>
-            <li><button id="addFriendBtn" class="add-friend-btn" data-profile-id="${userId}">Add Friend</button></li>
-            <li><a href="#">Message</a></li>
+            <li><a class="contact-button" href="mailto:${user.first}.${user.last}@dartmouth.edu">Send Email</a></li>
+            <li><button id="addFriendBtn" class="add-friend-btn contact-button" data-profile-id="${userId}">Add Friend</button></li>
+            <li><a class="contact-button" href="#">Message</a></li>
         </ul>
         <div id="friend-picker" class="friend-picker hidden"></div>
     `;
