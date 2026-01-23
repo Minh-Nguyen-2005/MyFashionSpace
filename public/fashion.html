@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" class="fashion-page">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="fashion-page">
+
+    <!-- Transparent Navbar -->
+    <div class="navbar">
+        <a href="/">Home</a> |
+        <a href="/shopping.html">Shopping</a> |
+        <a href="/fashion.html">Fashion</a> |
+        <a href="#">Blog</a> |
+        <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Music</a> |
+        <a href="/friends.html">Friends</a> |
+        <a href="#">Mail</a> |
+        <a href="/profile">Profile</a>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="container">
+            <div class="main">
+                <div class="section-title fashion-header">
+                    <span>My Fashion</span>
+                    <div class="fashion-actions">
+                        <a class="fashion-action" href="/upload-item.html">Upload</a>
+                        <a class="fashion-action" href="/sale.html">Sale</a>
+                    </div>
+                </div>
+                <div id="fashion-list" class="fashion-list">
+                    <p class="profile-blurb">Loading items...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const list = document.getElementById("fashion-list");
+    const [itemsRes, salesRes] = await Promise.all([fetch("/my-items"), fetch("/my-sales")]);
+    const items = await itemsRes.json();
+    const sales = await salesRes.json();
+    if (!itemsRes.ok) {
+        list.innerHTML = "<p class='profile-blurb'>Failed to load items.</p>";
+        return;
+    }
+    const saleIds = new Set((sales || []).map(s => String(s.item_id)));
+    list.innerHTML = "";
+    if (!items || items.length === 0) {
+        list.innerHTML = "<p class='profile-blurb'>No items yet.</p>";
+        return;
+    }
+    items.forEach(item => {
+        const card = document.createElement("div");
+        const isForSale = saleIds.has(String(item.id));
+        card.className = "fashion-card";
+        card.innerHTML = `
+            <img src="${item.image || '/pictures/NGUYEN_MINH.jpg'}" alt="${item.name}">
+            <div class="fashion-info">
+                <div class="fashion-name">${item.name}</div>
+                <div class="fashion-buttons">
+                    <a class="fashion-view" href="${item.image}" target="_blank" rel="noopener noreferrer">View</a>
+                    <button class="fashion-sell" type="button" ${isForSale ? "disabled" : ""}>
+                        ${isForSale ? "On Sale" : "Sell"}
+                    </button>
+                </div>
+            </div>
+        `;
+        card.querySelector(".fashion-sell").addEventListener("click", async () => {
+            if (isForSale) return;
+            const floorPrice = prompt("Set a floor price (USD):");
+            if (!floorPrice) return;
+            const res = await fetch("/sell-item", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ itemId: item.id, floorPrice })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                location.reload();
+            } else {
+                alert(data.message || "Failed to sell item.");
+            }
+        });
+        list.appendChild(card);
+    });
+});
+</script>
+
+</body>
+</html>

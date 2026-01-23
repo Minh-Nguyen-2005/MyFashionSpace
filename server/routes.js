@@ -3,6 +3,13 @@
 const multer = require('multer');
 const path = require('path');
 
+function sanitizeFileBase(value) {
+  return String(value || 'item')
+    .trim()
+    .replace(/[^a-z0-9_-]+/gi, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
 // configure storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -18,6 +25,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+const itemStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../public/uploads'));
+  },
+  filename: function (req, file, cb) {
+    const timestamp = Date.now();
+    const ext = path.extname(file.originalname);
+    const base = sanitizeFileBase(req.body.name);
+    cb(null, `item_${base}_${timestamp}${ext}`);
+  }
+});
+
+const itemUpload = multer({ storage: itemStorage });
 
 module.exports = function (app, db) {
 
@@ -32,13 +52,16 @@ module.exports = function (app, db) {
 
   // LOGIN
   app.post("/login", (req, res) => {
-    const { first, last } = req.body;
+    const { first, last, email, password } = req.body;
+    if (!first || !last || !email || !password) {
+      return res.status(400).json({ success: false, message: "Missing required fields" });
+    }
     db.get(
-      `SELECT * FROM users WHERE first = ? AND last = ?`,
-      [first, last],
+      `SELECT * FROM users WHERE first = ? AND last = ? AND email = ? AND password = ?`,
+      [first, last, email, password],
       (err, row) => {
         if (err) return res.status(500).json({ error: err.message });
-        if (!row) return res.status(404).json({ success: false, message: "User not found" });
+        if (!row) return res.status(404).json({ success: false, message: "Invalid credentials" });
 
         req.session.userId = row.id;
         res.json({ success: true, profileUrl: `/profile.html?id=${row.id}` });
@@ -46,10 +69,35 @@ module.exports = function (app, db) {
     );
   });
 
+  // CURRENT USER
+  app.get("/me", (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    db.get(
+      `SELECT * FROM users WHERE id = ?`,
+      [req.session.userId],
+      (err, row) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(row || {});
+      }
+    );
+  });
+
   // SIGN UP
   app.post("/signup", upload.single('image'), (req, res) => {
-    const { first, last, about, interests } = req.body;
+    const { first, last, about, interests, email, password } = req.body;
     let imagePath = null;
+
+    if (!first || !last || !email || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+    if (String(password).length < 8) {
+      return res.status(400).json({ error: "Password must be at least 8 characters" });
+    }
 
     if (req.file) {
       // store file path relative to public
@@ -57,8 +105,8 @@ module.exports = function (app, db) {
     }
 
     db.run(
-      `INSERT INTO users (first, last, about, interests, image) VALUES (?, ?, ?, ?, ?)`,
-      [first, last, about, interests, imagePath],
+      `INSERT INTO users (first, last, about, interests, image, email, password) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [first, last, about, interests, imagePath, email, password],
       function (err) {
         if (err) return res.status(500).json({ error: err.message });
 
@@ -67,6 +115,256 @@ module.exports = function (app, db) {
           success: true,
           profileUrl: `/profile.html?id=${this.lastID}`
         });
+      }
+    );
+  });
+
+  // UPLOAD ITEM
+  app.post("/upload-item", itemUpload.single('image'), (req, res) => {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    const { name } = req.body;
+    if (!name || !req.file) {
+      return res.status(400).json({ success: false, message: "Missing item name or image" });
+    }
+    const imagePath = `/uploads/${req.file.filename}`;
+    db.run(
+      `INSERT INTO items (owner_id, name, image) VALUES (?, ?, ?)`,
+      [userId, name, imagePath],
+      function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true, itemId: this.lastID });
+      }
+    );
+  });
+
+  // LIST USER ITEMS
+  app.get("/my-items", (req, res) => {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    db.all(
+      `SELECT * FROM items WHERE owner_id = ? ORDER BY created_at DESC`,
+      [userId],
+      (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows || []);
+      }
+    );
+  });
+
+  // CREATE SALE
+  app.post("/sell-item", (req, res) => {
+    const userId = req.session.userId;
+    const { itemId, floorPrice } = req.body;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    if (!itemId || !floorPrice) {
+      return res.status(400).json({ success: false, message: "Missing itemId or floorPrice" });
+    }
+    db.get(
+      `SELECT * FROM items WHERE id = ? AND owner_id = ?`,
+      [itemId, userId],
+      (err, item) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (!item) return res.status(403).json({ success: false, message: "Not item owner" });
+        db.get(
+          `SELECT * FROM sales WHERE item_id = ? AND status = 'active'`,
+          [itemId],
+          (saleErr, sale) => {
+            if (saleErr) return res.status(500).json({ error: saleErr.message });
+            if (sale) return res.status(400).json({ success: false, message: "Item already for sale" });
+            db.run(
+              `INSERT INTO sales (item_id, seller_id, floor_price, status) VALUES (?, ?, ?, 'active')`,
+              [itemId, userId, Number(floorPrice)],
+              function (runErr) {
+                if (runErr) return res.status(500).json({ error: runErr.message });
+                res.json({ success: true, saleId: this.lastID });
+              }
+            );
+          }
+        );
+      }
+    );
+  });
+
+  // LIST MARKET ITEMS
+  app.get("/market", (req, res) => {
+    db.all(
+      `
+      SELECT s.id AS sale_id, s.floor_price, s.status,
+             i.id AS item_id, i.name, i.image, i.owner_id
+      FROM sales s
+      JOIN items i ON s.item_id = i.id
+      WHERE s.status = 'active'
+      ORDER BY s.created_at DESC
+      `,
+      (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows || []);
+      }
+    );
+  });
+
+  // LIST USER SALES
+  app.get("/my-sales", (req, res) => {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    db.all(
+      `
+      SELECT s.id AS sale_id, s.floor_price, s.status,
+             i.id AS item_id, i.name, i.image
+      FROM sales s
+      JOIN items i ON s.item_id = i.id
+      WHERE s.seller_id = ? AND s.status = 'active'
+      ORDER BY s.created_at DESC
+      `,
+      [userId],
+      (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows || []);
+      }
+    );
+  });
+
+  // SALE DETAILS
+  app.get("/sale/:id", (req, res) => {
+    db.get(
+      `
+      SELECT s.id AS sale_id, s.floor_price, s.status, s.seller_id,
+             i.id AS item_id, i.name, i.image
+      FROM sales s
+      JOIN items i ON s.item_id = i.id
+      WHERE s.id = ?
+      `,
+      [req.params.id],
+      (err, row) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(row || {});
+      }
+    );
+  });
+
+  // LIST BIDS FOR SALE
+  app.get("/bids/:saleId", (req, res) => {
+    db.all(
+      `
+      SELECT b.id, b.bid_price, b.created_at,
+             u.id AS user_id, u.first, u.last, u.image
+      FROM bids b
+      JOIN users u ON b.bidder_id = u.id
+      WHERE b.sale_id = ?
+      ORDER BY b.bid_price DESC, b.created_at DESC
+      `,
+      [req.params.saleId],
+      (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows || []);
+      }
+    );
+  });
+
+  // PLACE BID
+  app.post("/bid", (req, res) => {
+    const userId = req.session.userId;
+    const { saleId, bidPrice } = req.body;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    if (!saleId || !bidPrice) {
+      return res.status(400).json({ success: false, message: "Missing saleId or bidPrice" });
+    }
+    db.get(
+      `SELECT * FROM sales WHERE id = ? AND status = 'active'`,
+      [saleId],
+      (err, sale) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (!sale) return res.status(404).json({ success: false, message: "Sale not found" });
+        if (String(sale.seller_id) === String(userId)) {
+          return res.status(400).json({ success: false, message: "Cannot bid on your own item" });
+        }
+        const price = Number(bidPrice);
+        if (!(price > Number(sale.floor_price))) {
+          return res.status(400).json({ success: false, message: "Bid must be higher than floor price" });
+        }
+        db.get(
+          `SELECT * FROM bids WHERE sale_id = ? AND bidder_id = ?`,
+          [saleId, userId],
+          (bidErr, existingBid) => {
+            if (bidErr) return res.status(500).json({ error: bidErr.message });
+            if (existingBid) {
+              if (!(price > Number(existingBid.bid_price))) {
+                return res.status(400).json({ success: false, message: "New bid must be higher than your current bid" });
+              }
+              db.run(
+                `UPDATE bids SET bid_price = ?, created_at = CURRENT_TIMESTAMP WHERE id = ?`,
+                [price, existingBid.id],
+                function (updateErr) {
+                  if (updateErr) return res.status(500).json({ error: updateErr.message });
+                  res.json({ success: true, bidId: existingBid.id });
+                }
+              );
+            } else {
+              db.run(
+                `INSERT INTO bids (sale_id, bidder_id, bid_price) VALUES (?, ?, ?)`,
+                [saleId, userId, price],
+                function (runErr) {
+                  if (runErr) return res.status(500).json({ error: runErr.message });
+                  res.json({ success: true, bidId: this.lastID });
+                }
+              );
+            }
+          }
+        );
+      }
+    );
+  });
+
+  // ACCEPT BID
+  app.post("/accept-bid", (req, res) => {
+    const userId = req.session.userId;
+    const { bidId } = req.body;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    if (!bidId) {
+      return res.status(400).json({ success: false, message: "Missing bidId" });
+    }
+    db.get(
+      `
+      SELECT b.id AS bid_id, b.bid_price, b.bidder_id, s.id AS sale_id, s.item_id, s.seller_id
+      FROM bids b
+      JOIN sales s ON b.sale_id = s.id
+      WHERE b.id = ? AND s.status = 'active'
+      `,
+      [bidId],
+      (err, row) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (!row) return res.status(404).json({ success: false, message: "Bid not found" });
+        if (String(row.seller_id) !== String(userId)) {
+          return res.status(403).json({ success: false, message: "Not sale owner" });
+        }
+        db.run(
+          `UPDATE items SET owner_id = ? WHERE id = ?`,
+          [row.bidder_id, row.item_id],
+          (itemErr) => {
+            if (itemErr) return res.status(500).json({ error: itemErr.message });
+            db.run(
+              `UPDATE sales SET status = 'sold' WHERE id = ?`,
+              [row.sale_id],
+              (saleErr) => {
+                if (saleErr) return res.status(500).json({ error: saleErr.message });
+                res.json({ success: true });
+              }
+            );
+          }
+        );
       }
     );
   });

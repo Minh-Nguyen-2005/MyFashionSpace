@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="queue-page">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="queue-page">
+
+    <!-- Transparent Navbar -->
+    <div class="navbar">
+        <a href="/">Home</a> |
+        <a href="/shopping.html">Shopping</a> |
+        <a href="/fashion.html">Fashion</a> |
+        <a href="#">Blog</a> |
+        <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Music</a> |
+        <a href="/friends.html">Friends</a> |
+        <a href="#">Mail</a> |
+        <a href="/profile">Profile</a>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="container">
+            <div class="main">
+                <div class="section-title">Item Queue</div>
+                <div id="queue-item" class="queue-item"></div>
+                <div class="section-title">Buyer Queue</div>
+                <div id="queue-list" class="queue-list">
+                    <p class="profile-blurb">Loading bids...</p>
+                </div>
+                <div id="bid-box" class="bid-box hidden">
+                    <label for="bid-price">Your Bid (USD)</label>
+                    <input type="number" id="bid-price" min="0" step="0.01">
+                    <button id="bid-submit" type="button">Submit Bid</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+function getSaleId() {
+    const params = new URLSearchParams(location.search);
+    return params.get("saleId");
+}
+
+async function loadQueue() {
+    const saleId = getSaleId();
+    const itemBox = document.getElementById("queue-item");
+    const list = document.getElementById("queue-list");
+    const bidBox = document.getElementById("bid-box");
+    const bidInput = document.getElementById("bid-price");
+    const bidSubmit = document.getElementById("bid-submit");
+
+    if (!saleId) {
+        itemBox.innerHTML = "<p class='profile-blurb'>Missing sale ID.</p>";
+        list.innerHTML = "";
+        return;
+    }
+
+    const [saleRes, bidsRes, meRes] = await Promise.all([
+        fetch(`/sale/${saleId}`),
+        fetch(`/bids/${saleId}`),
+        fetch("/me")
+    ]);
+    const sale = await saleRes.json();
+    const bids = await bidsRes.json();
+    const me = meRes.ok ? await meRes.json() : null;
+
+    if (!saleRes.ok || !sale.sale_id) {
+        itemBox.innerHTML = "<p class='profile-blurb'>Sale not found.</p>";
+        list.innerHTML = "";
+        return;
+    }
+
+    itemBox.innerHTML = `
+        <div class="queue-card">
+            <img src="${sale.image || '/pictures/NGUYEN_MINH.jpg'}" alt="${sale.name}">
+            <div class="queue-info">
+                <div class="queue-name">${sale.name}</div>
+                <div class="queue-price">Floor: $${Number(sale.floor_price).toFixed(2)}</div>
+            </div>
+        </div>
+    `;
+
+    list.innerHTML = "";
+    if (sale.status !== "active") {
+        list.innerHTML = "<p class='profile-blurb'>This sale is closed.</p>";
+    } else if (!bids || bids.length === 0) {
+        list.innerHTML = "<p class='profile-blurb'>No bids yet.</p>";
+    } else {
+        bids.forEach(bid => {
+            const row = document.createElement("div");
+            row.className = "queue-row";
+            row.innerHTML = `
+                <img src="${bid.image || '/pictures/NGUYEN_MINH.jpg'}" alt="${bid.first} ${bid.last}">
+                <div class="queue-bidder">
+                    <div class="queue-bidder-name">${bid.first} ${bid.last}</div>
+                    <div class="queue-bid">${Number(bid.bid_price).toFixed(2)}</div>
+                </div>
+            `;
+            if (me && String(me.id) === String(sale.seller_id)) {
+                const acceptBtn = document.createElement("button");
+                acceptBtn.className = "queue-accept";
+                acceptBtn.type = "button";
+                acceptBtn.textContent = "Accept";
+                acceptBtn.addEventListener("click", async () => {
+                    const res = await fetch("/accept-bid", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({ bidId: bid.id })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        alert("Sold!");
+                        window.location = "/sale.html";
+                    } else {
+                        alert(data.message || "Failed to accept bid.");
+                    }
+                });
+                row.appendChild(acceptBtn);
+            }
+            list.appendChild(row);
+        });
+    }
+
+    if (sale.status === "active" && me && String(me.id) !== String(sale.seller_id)) {
+        bidBox.classList.remove("hidden");
+        bidSubmit.onclick = async () => {
+            const bidPrice = bidInput.value;
+            if (!bidPrice) return;
+            const res = await fetch("/bid", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ saleId, bidPrice })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                bidInput.value = "";
+                loadQueue();
+            } else {
+                alert(data.message || "Failed to place bid.");
+            }
+        };
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadQueue);
+</script>
+
+</body>
+</html>

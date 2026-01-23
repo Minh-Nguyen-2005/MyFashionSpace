@@ -3,56 +3,128 @@
    ========================= */
 
 /* ---------- Global Reset & Body ---------- */
+/* THEME SETTINGS: edit fonts/colors here */
+:root {
+    --base-font: Arial, sans-serif;
+    --accent-font: 'Snell Roundhand', cursive;
+    --accent-color: #ff5fa2;
+    --text-color: #222;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: var(--base-font);
     background-color: #f7f2f6;
-    color: #222;
+    color: var(--text-color);
     height: 100%;
 }
 
 /* Profile Page Background (change this image path) */
+html.profile-page,
 body.profile-page {
     background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
     background-repeat: repeat;
     background-size: auto;
-    background-attachment: fixed;
+    background-attachment: scroll;
 }
 
 /* Home Page Background (change this image path) */
 html.home-page,
 body.home-page {
     background-image: url('pictures/360_F_954279052_H2VR4h5Wx9nCMEb7FPnXVPcXurVdET2g.jpg');
-    /* background-repeat: no-repeat; */
-    background-position: center;
-    background-size: cover;
+    background-repeat: repeat;
+    background-position: top left;
+    background-size: auto;
     min-height: 100vh;
-    background-attachment: fixed;
+    background-attachment: scroll;
     font-family: 'Snell Roundhand', cursive;
     font-size: 2.25rem;
 }
 
 /* Log-in Page Background (change this image path) */
+html.login-page,
 body.login-page {
     background-image: url('pictures/0b642f4fe2cdd25caf9694a0a98fc263.jpg');
     font-family: 'Snell Roundhand', cursive;
     font-size: 2.25rem;
+    background-repeat: repeat;
+    background-size: auto;
 }
 
 /* Sign-up Page Background (change this image path) */
+html.signup-page,
 body.signup-page {
     background-image: url('pictures/0b642f4fe2cdd25caf9694a0a98fc263.jpg');
     font-family: 'Snell Roundhand', cursive;
     font-size: 2.25rem;
+    background-repeat: repeat;
+    background-size: auto;
+}
+
+/* Shopping Page Background (change this image path) */
+html.shopping-page,
+body.shopping-page {
+    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-repeat: repeat;
+    background-position: top left;
+    background-size: auto;
+    min-height: 100vh;
+}
+
+/* Fashion Page Background (change this image path) */
+html.fashion-page,
+body.fashion-page {
+    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-repeat: repeat;
+    background-position: top left;
+    background-size: auto;
+    min-height: 100vh;
+}
+
+/* Upload Page Background (change this image path) */
+html.upload-page,
+body.upload-page {
+    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-repeat: repeat;
+    background-position: top left;
+    background-size: auto;
+    min-height: 100vh;
+}
+
+/* Sale Page Background (change this image path) */
+html.sale-page,
+body.sale-page {
+    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-repeat: repeat;
+    background-position: top left;
+    background-size: auto;
+    min-height: 100vh;
+}
+
+/* Queue Page Background (change this image path) */
+html.queue-page,
+body.queue-page {
+    background-image: url('pictures/glitter-pink-background-3000-x-2000-5g4yeyx6qhc91f0t.jpg');
+    background-repeat: repeat;
+    background-position: top left;
+    background-size: auto;
+    min-height: 100vh;
 }
 
 /* Friends Page Background (change this image path) */
+html.friends-page,
 body.friends-page {
     background-image: url('pictures/39781c49f058f6382e8b0a48ee1e8168.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+    background-repeat: repeat;
+    background-position: top left;
+    background-size: auto;
     min-height: 100vh;
     font-family: 'Snell Roundhand', cursive;
 
@@ -139,6 +211,24 @@ body.friends-page {
     font-size: 1rem;
     font-family: Arial, sans-serif;
     font-weight: normal;
+}
+.auth-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.auth-field input {
+    width: 100%;
+    padding-right: 38px;
+}
+.toggle-visibility {
+    position: absolute;
+    right: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
 }
 .auth-form button {
     align-self: flex-start;
@@ -421,6 +511,218 @@ body.friends-page {
     background: #e13b5b;
 }
 
+/* Shopping page */
+.market-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+.market-card {
+    background: rgba(255,255,255,0.45);
+    border: 2px solid rgba(0,0,0,0.25);
+    padding: 12px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    text-align: center;
+}
+.market-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border: 2px solid rgba(0,0,0,0.25);
+}
+.market-name {
+    margin-top: 10px;
+    font-weight: bold;
+}
+.market-price {
+    color: #c2185b;
+    font-weight: bold;
+}
+.market-image-link {
+    display: block;
+}
+
+/* Fashion page */
+.fashion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.fashion-actions {
+    display: flex;
+    gap: 10px;
+}
+.fashion-action {
+    background: var(--accent-color);
+    color: #fff;
+    padding: 6px 10px;
+    text-decoration: none;
+    border: 2px solid #ff2e87;
+    font-weight: bold;
+}
+.fashion-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+}
+.fashion-card {
+    background: rgba(255,255,255,0.45);
+    border: 2px solid rgba(0,0,0,0.25);
+    padding: 12px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+.fashion-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border: 2px solid rgba(0,0,0,0.25);
+}
+.fashion-name {
+    font-weight: bold;
+    margin: 8px 0;
+}
+.fashion-buttons {
+    display: flex;
+    gap: 8px;
+}
+.fashion-view,
+.fashion-sell {
+    background: #fff;
+    border: 2px solid #ff2e87;
+    color: #ff2e87;
+    padding: 6px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+.fashion-sell[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Sale page */
+.sale-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.sale-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,0.45);
+    border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+.sale-card img {
+    width: 90px;
+    height: 110px;
+    object-fit: cover;
+    border: 2px solid rgba(0,0,0,0.25);
+}
+.sale-info {
+    flex: 1;
+}
+.sale-name {
+    font-weight: bold;
+}
+.sale-price {
+    color: #c2185b;
+    font-weight: bold;
+}
+.sale-queue {
+    background: var(--accent-color);
+    color: #fff;
+    padding: 6px 10px;
+    text-decoration: none;
+    border: 2px solid #ff2e87;
+    font-weight: bold;
+}
+
+/* Queue page */
+.queue-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,0.45);
+    border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    margin-bottom: 12px;
+}
+.queue-card img {
+    width: 110px;
+    height: 130px;
+    object-fit: cover;
+    border: 2px solid rgba(0,0,0,0.25);
+}
+.queue-name {
+    font-weight: bold;
+}
+.queue-price {
+    color: #c2185b;
+    font-weight: bold;
+}
+.queue-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.queue-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(255,255,255,0.45);
+    border: 2px solid rgba(0,0,0,0.25);
+}
+.queue-row img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 2px solid rgba(0,0,0,0.25);
+}
+.queue-bidder {
+    flex: 1;
+}
+.queue-bid {
+    font-weight: bold;
+}
+.queue-accept {
+    background: #ff4d6d;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.bid-box {
+    margin-top: 14px;
+    background: rgba(255,255,255,0.45);
+    border: 2px solid rgba(0,0,0,0.25);
+    padding: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.bid-box input {
+    padding: 6px 8px;
+    border: 1px solid rgba(0,0,0,0.3);
+}
+.bid-box button {
+    background: var(--accent-color);
+    color: #fff;
+    border: 2px solid #ff2e87;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.hidden {
+    display: none;
+}
+
 
 /* Responsive */
 @media (max-width: 900px) {
@@ -432,5 +734,91 @@ body.friends-page {
     }
     .sidebar, .main {
         width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        font-size: 0.95rem;
+    }
+    .navbar {
+        font-size: 1rem;
+        padding: 10px 6px;
+        line-height: 1.6;
+        white-space: normal;
+    }
+    .navbar a {
+        display: inline-block;
+        margin: 0 6px;
+    }
+    .sidebar h2 {
+        font-size: 1.8rem;
+    }
+    .friends-title {
+        font-size: 1.9rem;
+    }
+    .section-title {
+        font-size: 1.1rem;
+    }
+    .friends-page .section-title {
+        font-size: 1.3rem;
+    }
+    .profile-blurb,
+    .posts-list p {
+        font-size: 0.95rem;
+    }
+    .market-name,
+    .fashion-name,
+    .sale-name,
+    .queue-name,
+    .friends-page-name {
+        font-size: 1rem;
+    }
+    .friends-list img {
+        width: 110px;
+        height: 130px;
+    }
+    .market-list,
+    .fashion-list {
+        grid-template-columns: 1fr;
+    }
+    .market-card img,
+    .fashion-card img {
+        height: auto;
+        max-height: 260px;
+    }
+    .sale-card,
+    .friends-page-card,
+    .queue-card,
+    .queue-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .sale-card img,
+    .friends-page-card img,
+    .queue-card img,
+    .queue-row img {
+        width: 100%;
+        height: auto;
+        max-width: 260px;
+    }
+    .bid-box {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .bid-box input,
+    .bid-box button {
+        width: 100%;
+    }
+    .fashion-buttons {
+        flex-direction: column;
+    }
+    .fashion-view,
+    .fashion-sell {
+        width: 100%;
+        text-align: center;
+    }
+    .login-signup-container {
+        margin-top: 60px;
     }
 }

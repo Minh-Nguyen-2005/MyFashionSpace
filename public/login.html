@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="login-page">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +13,8 @@
       <form id="loginForm" class="auth-form">
         <input type="text" id="first" placeholder="First Name" required>
         <input type="text" id="last" placeholder="Last Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password (min 8 chars)" minlength="8" required>
         <button type="submit">Log In</button>
       </form>
     </div>
@@ -23,11 +25,13 @@ document.getElementById("loginForm").onsubmit = async (e) => {
   e.preventDefault();
   const first = document.getElementById("first").value;
   const last = document.getElementById("last").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
   const res = await fetch("/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ first, last })
+    body: JSON.stringify({ first, last, email, password })
   });
   const data = await res.json();
   if (data.success) window.location = data.profileUrl;
