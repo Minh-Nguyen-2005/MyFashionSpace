@@ -50,6 +50,46 @@ body.profile-page {
 .profile-page .contact-list a {
     color: #fff;
 }
+.audio-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+    background: radial-gradient(circle at top, rgba(255, 230, 242, 0.9), rgba(255, 105, 180, 0.9)) !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 14px rgba(255, 182, 213, 0.9), 0 0 28px rgba(255, 105, 180, 0.8) !important;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+}
+.audio-toggle:hover {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.95), 0 0 18px rgba(255, 182, 213, 0.9);
+    box-shadow: 0 0 18px rgba(255, 182, 213, 1), 0 0 36px rgba(255, 105, 180, 0.9) !important;
+    transform: scale(1.06);
+}
+
+#audio-start-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    font-family: var(--button-font);
+    font-size: 1.2rem;
+    border: none;
+    cursor: pointer;
+    text-shadow: 0 0 10px rgba(255, 182, 213, 0.9), 0 0 20px rgba(255, 105, 180, 0.9);
+}
 .contact-button {
     display: inline-block;
     padding: 10px 16px;
@@ -60,6 +100,7 @@ body.profile-page {
 }
 .contact-button:hover {
     transform: scale(1.06);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
 }
 .profile-page .contact-button {
     background-image: url('pictures/1a0ca5723cb409294036416cbe390e7b.gif') !important;
@@ -244,24 +285,42 @@ body.friends-page {
     background: none !important;
     border: none !important;
     box-shadow: none !important;
+    min-height: 100vh;
+    margin: 0 auto;
+    justify-content: center;
 }
 .login-signup-container h1 {
     color: #fff;
     text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+    font-size: 1.8rem;
 }
 .welcome-subtitle {
     color: #ffe6f2;
     font-family: "Snell Roundhand", "Apple Chancery", "Brush Script MT", cursive;
-    font-size: 2rem;
+    font-size: 2.6rem;
     letter-spacing: 0.5px;
-    margin-top: -28px;
+    margin-top: 40px;
     text-shadow: 0 0 8px rgba(255, 95, 162, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+.welcome-to {
+    font-size: 1.2rem;
+}
+.welcome-name {
+    font-size: 3rem;
+    text-align: center;
+    text-shadow: 0 0 14px rgba(255, 182, 213, 0.95), 0 0 28px rgba(255, 105, 180, 0.7);
 }
 .login-signup-container .options {
     display: flex;
     gap: 12px;
     justify-content: center;
     margin-top: 16px;
+    margin-top: auto;
+    margin-bottom: 80px;
 }
 .login-signup-container button {
     padding: 12px 20px;
@@ -271,6 +330,7 @@ body.friends-page {
 }
 .login-signup-container button:hover {
     transform: scale(1.06);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
 }
 
 /* Global button look */
@@ -312,6 +372,7 @@ a.fashion-action:hover,
 a.fashion-view:hover,
 a.sale-queue:hover {
     transform: scale(1.06);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
 }
 .auth-page {
     display: flex;
@@ -326,14 +387,28 @@ a.sale-queue:hover {
     padding-top: 0;
 }
 .login-page h2 {
-    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+    text-shadow: 0 0 14px rgba(255, 182, 213, 0.95), 0 0 28px rgba(255, 105, 180, 0.7);
+}
+.login-page .auth-card {
+    align-items: center;
+    text-align: center;
+}
+.login-page .auth-form button {
+    align-self: center;
 }
 .signup-page .auth-page {
     align-items: center;
     padding-top: 0;
 }
 .signup-page h2 {
-    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
+    text-shadow: 0 0 14px rgba(255, 182, 213, 0.95), 0 0 28px rgba(255, 105, 180, 0.7);
+}
+.signup-page .auth-card {
+    align-items: center;
+    text-align: center;
+}
+.signup-page .auth-form button {
+    align-self: center;
 }
 .auth-card {
     width: min(520px, 92%);
@@ -356,6 +431,19 @@ a.sale-queue:hover {
     font-size: 1rem;
     font-family: Arial, sans-serif;
     font-weight: normal;
+}
+.login-page .auth-form input,
+.login-page .auth-form textarea,
+.signup-page .auth-form input,
+.signup-page .auth-form textarea {
+    box-shadow: 0 0 10px rgba(255, 182, 213, 0.6);
+}
+.upload-page .auth-form input,
+.upload-page .auth-form textarea {
+    box-shadow: 0 0 10px rgba(255, 182, 213, 0.6);
+}
+.signup-page label {
+    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
 }
 .auth-field {
     position: relative;
@@ -388,6 +476,7 @@ a.sale-queue:hover {
 }
 .auth-form button:hover {
     transform: scale(1.06);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
 }
 
 
@@ -411,7 +500,8 @@ a.sale-queue:hover {
     font-size: 1rem;
 }
 .navbar a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    text-shadow: 0 0 18px rgba(255, 210, 230, 1), 0 0 36px rgba(255, 105, 180, 1), 0 0 52px rgba(255, 20, 147, 1), 0 0 70px rgba(255, 20, 147, 0.95);
 }
 
 /* -------
@@ -456,6 +546,9 @@ a.sale-queue:hover {
     border: 3px solid #888;
     box-shadow: 0 0 10px rgba(0,0,0,0.25);
     margin-bottom: 18px;
+}
+.profile-page .sidebar img {
+    box-shadow: 0 0 16px rgba(255, 182, 213, 0.8);
 }
 .sidebar h2 {
     margin: 8px 0 12px;
@@ -634,6 +727,18 @@ a.sale-queue:hover {
     border-bottom: 2px solid rgba(0,0,0,0.25);
     margin-bottom: 14px;
     font-size: 1.3rem;
+    text-shadow: 0 0 12px rgba(255, 182, 213, 0.95), 0 0 24px rgba(255, 105, 180, 0.9);
+}
+.section-title-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.section-action {
+    padding: 10px 16px;
+    font-size: 1.1rem;
+    font-family: var(--button-font);
 }
 
 /* Friends page title */
@@ -766,6 +871,7 @@ a.sale-queue:hover {
 }
 .friends-page-link:hover {
     transform: scale(1.06);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
 }
 .friends-page-remove {
     padding: 10px 16px;
@@ -774,6 +880,7 @@ a.sale-queue:hover {
 }
 .friends-page-remove:hover {
     transform: scale(1.06);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
 }
 
 /* Shopping page */
@@ -1035,6 +1142,7 @@ a.sale-queue:hover {
 .bid-box input {
     padding: 6px 8px;
     border: 1px solid rgba(0,0,0,0.3);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
 }
 .bid-box button {
     padding: 10px 16px;

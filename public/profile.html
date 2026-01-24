@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="/styles.css">
+    <script src="/script.js" defer></script>
 </head>
 <body class="profile-page">
 
@@ -32,10 +33,16 @@
             <!-- RIGHT COLUMN: Details / Posts / Friends -->
             <div class="main">
 
-                <div class="section-title">About Me</div>
+                <div class="section-title section-title-action">
+                    <span>About Me</span>
+                    <button class="section-action hidden" data-field="about">Edit</button>
+                </div>
                 <p class="profile-blurb" id="about-section"></p>
 
-                <div class="section-title">Interests & Goals</div>
+                <div class="section-title section-title-action">
+                    <span>Interests & Goals</span>
+                    <button class="section-action hidden" data-field="interests">Edit</button>
+                </div>
                 <p class="profile-blurb" id="interests-section"></p>
 
                 <div class="section-title">Latest Posts</div>
@@ -109,8 +116,73 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // --- RENDER ABOUT / INTERESTS ---
-    document.getElementById("about-section").textContent = user.about || "";
-    document.getElementById("interests-section").textContent = user.interests || "";
+    const aboutEl = document.getElementById("about-section");
+    const interestsEl = document.getElementById("interests-section");
+    aboutEl.textContent = user.about || "";
+    interestsEl.textContent = user.interests || "";
+
+    // --- EDIT BLURBS (OWN PROFILE ONLY) ---
+    if (isMe) {
+        const saveField = async (field, target) => {
+            const payload = {};
+            payload[field] = target.textContent.trim();
+            const res = await fetch("/update-profile", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                alert(data.message || "Failed to update profile.");
+                return false;
+            }
+            return true;
+        };
+
+        const keepEditing = (target) => {
+            target.setAttribute("contenteditable", "true");
+            target.classList.add("editing");
+        };
+
+        document.querySelectorAll(".section-action").forEach((btn) => {
+            btn.classList.remove("hidden");
+            btn.addEventListener("click", async () => {
+                const field = btn.dataset.field;
+                const target = field === "about" ? aboutEl : interestsEl;
+                const isEditing = btn.textContent === "Done";
+                if (!isEditing) {
+                    keepEditing(target);
+                    target.focus();
+                    btn.textContent = "Done";
+                    return;
+                }
+                target.dataset.saving = "1";
+                const saved = await saveField(field, target);
+                delete target.dataset.saving;
+                if (saved) {
+                    target.setAttribute("contenteditable", "false");
+                    target.classList.remove("editing");
+                    btn.textContent = "Edit";
+                    delete target.dataset.draft;
+                }
+            });
+
+            const field = btn.dataset.field;
+            const target = field === "about" ? aboutEl : interestsEl;
+            target.addEventListener("input", () => {
+                target.dataset.draft = target.textContent;
+            });
+            target.addEventListener("blur", () => {
+                if (target.dataset.saving === "1") return;
+                if (btn.textContent === "Done") {
+                    if (target.dataset.draft !== undefined) {
+                        target.textContent = target.dataset.draft;
+                    }
+                    keepEditing(target);
+                }
+            });
+        });
+    }
 
     // --- POSTS LIST ---
     async function loadPosts() {

@@ -482,6 +482,37 @@ module.exports = function (app, db) {
     );
   });
 
+  // UPDATE PROFILE BLURBS
+  app.post("/update-profile", (req, res) => {
+    const userId = req.session.userId;
+    const { about, interests } = req.body;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+    if (typeof about !== "string" && typeof interests !== "string") {
+      return res.status(400).json({ success: false, message: "No updates provided" });
+    }
+    const updates = [];
+    const params = [];
+    if (typeof about === "string") {
+      updates.push("about = ?");
+      params.push(about);
+    }
+    if (typeof interests === "string") {
+      updates.push("interests = ?");
+      params.push(interests);
+    }
+    params.push(userId);
+    db.run(
+      `UPDATE users SET ${updates.join(", ")} WHERE id = ?`,
+      params,
+      function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+      }
+    );
+  });
+
   // GET USERS (excluding current user if logged in)
   app.get("/users", (req, res) => {
     const userId = req.session.userId;
