@@ -37,8 +37,20 @@
   toggle.className = "audio-toggle";
   toggle.type = "button";
   toggle.setAttribute("aria-label", "Toggle music");
-  toggle.textContent = audio.muted ? "🔇" : "🔊";
+  const renderToggle = () => {
+    toggle.innerHTML = audio.muted
+      ? '<img src="/pictures/shhhh.gif" alt="Muted">'
+      : '<img src="/pictures/music.gif" alt="Playing">';
+  };
+  renderToggle();
   document.body.appendChild(toggle);
+
+  if (!document.querySelector(".site-credit")) {
+    const credit = document.createElement("div");
+    credit.className = "yours-truly-credit site-credit";
+    credit.textContent = "Minh Tai Nguyen © 2026";
+    document.body.appendChild(credit);
+  }
 
   const tryPlay = () => {
     return audio.play().catch(() => false);
@@ -53,7 +65,7 @@
     overlay.addEventListener("click", async () => {
       audio.muted = false;
       sessionStorage.setItem("audioMuted", "false");
-      toggle.textContent = "🔊";
+      renderToggle();
       await tryPlay();
       overlay.remove();
     });
@@ -67,7 +79,14 @@
   });
 
   window.addEventListener("pageshow", () => {
+    const stored = sessionStorage.getItem("audioMuted");
+    audio.muted = stored === "true";
+    renderToggle();
     if (!audio.muted) {
+      const latestTime = parseFloat(sessionStorage.getItem(`audioTime:${group}`) || "0");
+      if (!Number.isNaN(latestTime) && latestTime > 0) {
+        audio.currentTime = latestTime;
+      }
       tryPlay().then((ok) => {
         if (ok === false) {
           showStartOverlay();
@@ -79,7 +98,7 @@
   toggle.addEventListener("click", () => {
     audio.muted = !audio.muted;
     sessionStorage.setItem("audioMuted", String(audio.muted));
-    toggle.textContent = audio.muted ? "🔇" : "🔊";
+    renderToggle();
     if (!audio.muted) {
       tryPlay();
     }
@@ -88,6 +107,7 @@
   const saveTime = () => {
     sessionStorage.setItem(`audioTime:${group}`, String(audio.currentTime || 0));
   };
+  audio.addEventListener("timeupdate", saveTime);
   window.addEventListener("beforeunload", saveTime);
   window.addEventListener("pagehide", saveTime);
 })();

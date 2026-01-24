@@ -55,24 +55,31 @@ body.profile-page {
     top: 12px;
     right: 12px;
     z-index: 100;
-    background: radial-gradient(circle at top, rgba(255, 230, 242, 0.9), rgba(255, 105, 180, 0.9)) !important;
-    border: 2px solid #fff !important;
-    box-shadow: 0 0 14px rgba(255, 182, 213, 0.9), 0 0 28px rgba(255, 105, 180, 0.8) !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     color: #fff;
-    font-size: 1.4rem;
     cursor: pointer;
-    width: 44px;
-    height: 44px;
-    border-radius: 999px;
+    width: 84px;
+    height: 84px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(6px);
+}
+.audio-toggle img {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(255, 182, 213, 0.9));
 }
 .audio-toggle:hover {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.95), 0 0 18px rgba(255, 182, 213, 0.9);
-    box-shadow: 0 0 18px rgba(255, 182, 213, 1), 0 0 36px rgba(255, 105, 180, 0.9) !important;
-    transform: scale(1.06);
+    box-shadow: 0 0 24px rgba(255, 182, 213, 1), 0 0 48px rgba(255, 105, 180, 1), 0 0 72px rgba(255, 20, 147, 0.95) !important;
+    transform: scale(1.08);
+}
+.audio-toggle:active {
+    box-shadow: 0 0 30px rgba(255, 182, 213, 1), 0 0 60px rgba(255, 105, 180, 1), 0 0 90px rgba(255, 20, 147, 1) !important;
+    transform: scale(1.1);
 }
 
 #audio-start-overlay {
@@ -248,6 +255,16 @@ body.queue-page {
     min-height: 100vh;
 }
 
+/* Yours Truly Page Background (change this image path) */
+html.yours-page,
+body.yours-page {
+    background-image: url('pictures/myback.gif');
+    background-repeat: repeat;
+    background-position: top left;
+    background-size: auto;
+    min-height: 100vh;
+}
+
 /* Friends Page Background (change this image path) */
 html.friends-page,
 body.friends-page {
@@ -289,17 +306,18 @@ body.friends-page {
     margin: 0 auto;
     justify-content: center;
 }
-.login-signup-container h1 {
-    color: #fff;
-    text-shadow: 0 0 8px rgba(255, 182, 213, 0.8);
-    font-size: 1.8rem;
+.welcome-img {
+    width: min(320px, 80vw);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.85));
 }
 .welcome-subtitle {
     color: #ffe6f2;
     font-family: "Snell Roundhand", "Apple Chancery", "Brush Script MT", cursive;
     font-size: 2.6rem;
     letter-spacing: 0.5px;
-    margin-top: 40px;
+    margin-top: 56px;
     text-shadow: 0 0 8px rgba(255, 95, 162, 0.6);
     display: flex;
     flex-direction: column;
@@ -312,7 +330,131 @@ body.friends-page {
 .welcome-name {
     font-size: 3rem;
     text-align: center;
-    text-shadow: 0 0 14px rgba(255, 182, 213, 0.95), 0 0 28px rgba(255, 105, 180, 0.7);
+    text-shadow: 0 0 20px rgba(255, 230, 242, 1), 0 0 40px rgba(255, 105, 180, 1), 0 0 60px rgba(255, 20, 147, 0.95), 0 0 90px rgba(255, 20, 147, 0.9);
+    position: relative;
+    display: inline-flex;
+    overflow: visible;
+    animation: neon-flicker 3.2s infinite;
+}
+.welcome-under {
+    width: min(220px, 70vw);
+    height: auto;
+    margin-top: 12px;
+    filter: drop-shadow(0 0 10px rgba(255, 182, 213, 0.8));
+}
+.welcome-under-2 {
+    width: min(240px, 72vw);
+    height: auto;
+    margin-top: 18px;
+    filter: drop-shadow(0 0 10px rgba(255, 182, 213, 0.8));
+}
+.welcome-under-3 {
+    width: min(240px, 72vw);
+    height: auto;
+    margin-top: 8px;
+    filter: drop-shadow(0 0 10px rgba(255, 182, 213, 0.8));
+}
+.welcome-under-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.home-butterflies {
+    position: fixed;
+    top: 40%;
+    width: min(200px, 28vw);
+    height: auto;
+    filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.9));
+    pointer-events: none;
+}
+.home-butterflies-left {
+    left: 48px;
+}
+.home-butterflies-right {
+    right: 48px;
+}
+.home-bird {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    width: min(200px, 30vw);
+    height: auto;
+    filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.9));
+    pointer-events: none;
+}
+.home-horse {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    width: min(220px, 32vw);
+    height: auto;
+    filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.9));
+    pointer-events: none;
+}
+
+/* Home page sparkle reveal */
+.home-page .welcome-name-text {
+    clip-path: inset(0 100% 0 0);
+    animation: welcome-reveal 1.6s ease-out forwards;
+    display: inline-block;
+    position: relative;
+    overflow: visible;
+    text-shadow: 0 0 18px rgba(255, 210, 230, 1), 0 0 36px rgba(255, 105, 180, 0.95), 0 0 54px rgba(255, 20, 147, 0.9);
+}
+.home-page .welcome-name-text::after {
+    content: "";
+    position: absolute;
+    inset: -20% -10%;
+    background:
+        radial-gradient(circle, rgba(255,255,255,0.9) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(255,182,213,0.95) 0 3px, transparent 4px),
+        radial-gradient(circle, rgba(255,105,180,0.9) 0 2px, transparent 3px);
+    background-size: 24px 24px, 32px 32px, 18px 18px;
+    background-position: 0 0, 8px 16px, 16px 4px;
+    mix-blend-mode: screen;
+    opacity: 0;
+    animation: glitter-burst 1.8s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes welcome-reveal {
+    0% { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(-40% -40% -40% -40%); }
+}
+
+@keyframes neon-flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 20px rgba(255, 230, 242, 1), 0 0 40px rgba(255, 105, 180, 1), 0 0 60px rgba(255, 20, 147, 0.95), 0 0 90px rgba(255, 20, 147, 0.9);
+    }
+    20%, 24%, 55% {
+        opacity: 0.6;
+        text-shadow: 0 0 8px rgba(255, 230, 242, 0.7), 0 0 16px rgba(255, 105, 180, 0.6);
+    }
+    56% {
+        opacity: 0.85;
+        text-shadow: 0 0 12px rgba(255, 230, 242, 0.85), 0 0 22px rgba(255, 105, 180, 0.75);
+    }
+}
+
+@keyframes glitter-burst {
+    0% {
+        opacity: 0;
+        transform: translateX(-10%);
+        filter: blur(2px);
+    }
+    40% {
+        opacity: 0.9;
+        transform: translateX(0%);
+        filter: blur(0.5px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(10%);
+        filter: blur(1px);
+    }
 }
 .login-signup-container .options {
     display: flex;
@@ -768,6 +910,83 @@ a.sale-queue:hover {
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+.yours-truly-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px);
+}
+.yours-truly-frame {
+    position: relative;
+    display: inline-block;
+}
+.yours-truly-img {
+    max-width: min(900px, 92vw);
+    max-height: calc(100vh - 160px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    box-shadow: 0 0 18px rgba(255, 182, 213, 0.9), 0 0 36px rgba(255, 105, 180, 0.9);
+}
+.yours-truly-decor {
+    position: absolute;
+    width: 170px;
+    height: auto;
+    pointer-events: none;
+    filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.95));
+}
+.decor-top-left {
+    top: -24px;
+    left: -24px;
+}
+.decor-top-right {
+    top: -24px;
+    right: -24px;
+}
+.decor-top-center {
+    top: -44px;
+    left: 56%;
+    transform: translateX(-50%);
+}
+.decor-left-center {
+    left: -36px;
+    top: 58%;
+    transform: translateY(-50%);
+}
+.decor-left-upper {
+    left: -34px;
+    top: 22%;
+}
+.decor-top-upper {
+    left: 24%;
+    top: 8px;
+}
+.decor-right-center {
+    right: -48px;
+    top: 44%;
+    transform: translateY(-50%);
+}
+.decor-right-upper {
+    right: -8px;
+    top: 18%;
+}
+.decor-bottom-left {
+    bottom: -24px;
+    left: -24px;
+}
+.decor-bottom-right {
+    bottom: -24px;
+    right: -92px;
+}
+.yours-truly-credit {
+    position: fixed;
+    right: 18px;
+    bottom: 16px;
+    color: #fff;
+    font-family: 'Snell Roundhand', cursive;
+    text-shadow: 0 0 18px rgba(255, 210, 230, 1), 0 0 36px rgba(255, 105, 180, 0.95), 0 0 54px rgba(255, 20, 147, 0.9);
+    font-size: 1.4rem;
 }
 .friends-page-columns {
     display: grid;
