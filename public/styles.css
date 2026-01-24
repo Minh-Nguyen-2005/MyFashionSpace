@@ -107,7 +107,18 @@ body.profile-page {
 }
 .contact-button:hover {
     transform: scale(1.06);
-    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
+    box-shadow: 0 0 18px rgba(255, 182, 213, 1), 0 0 36px rgba(255, 105, 180, 0.9);
+    text-shadow: 0 0 10px rgba(255, 210, 230, 1), 0 0 20px rgba(255, 105, 180, 0.95);
+}
+.surprise-gif {
+    display: inline-flex;
+    align-items: center;
+    filter: drop-shadow(0 0 10px rgba(255, 182, 213, 0.9));
+    pointer-events: auto;
+}
+.surprise-gif img {
+    height: 16px;
+    width: auto;
 }
 .profile-page .contact-button {
     background-image: url('pictures/1a0ca5723cb409294036416cbe390e7b.gif') !important;
@@ -472,7 +483,8 @@ body.friends-page {
 }
 .login-signup-container button:hover {
     transform: scale(1.06);
-    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
+    box-shadow: 0 0 18px rgba(255, 182, 213, 1), 0 0 36px rgba(255, 105, 180, 0.9);
+    text-shadow: 0 0 10px rgba(255, 210, 230, 1), 0 0 20px rgba(255, 105, 180, 0.95);
 }
 
 /* Global button look */
@@ -514,7 +526,8 @@ a.fashion-action:hover,
 a.fashion-view:hover,
 a.sale-queue:hover {
     transform: scale(1.06);
-    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
+    box-shadow: 0 0 18px rgba(255, 182, 213, 1), 0 0 36px rgba(255, 105, 180, 0.9);
+    text-shadow: 0 0 10px rgba(255, 210, 230, 1), 0 0 20px rgba(255, 105, 180, 0.95);
 }
 .auth-page {
     display: flex;
@@ -580,6 +593,18 @@ a.sale-queue:hover {
 .signup-page .auth-form textarea {
     box-shadow: 0 0 10px rgba(255, 182, 213, 0.6);
 }
+.login-page .auth-form input::placeholder,
+.login-page .auth-form textarea::placeholder,
+.signup-page .auth-form input::placeholder,
+.signup-page .auth-form textarea::placeholder {
+    font-family: 'Apple Chancery', cursive;
+    color: #e7b4ff;
+}
+.upload-page .auth-form input::placeholder,
+.upload-page .auth-form textarea::placeholder {
+    font-family: 'Apple Chancery', cursive;
+    color: #e7b4ff;
+}
 .upload-page .auth-form input,
 .upload-page .auth-form textarea {
     box-shadow: 0 0 10px rgba(255, 182, 213, 0.6);
@@ -602,8 +627,20 @@ a.sale-queue:hover {
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: 1.1rem;
     line-height: 1;
+}
+.toggle-visibility img {
+    width: 22px;
+    height: 22px;
+    display: block;
+    filter: drop-shadow(0 0 6px rgba(255, 182, 213, 0.9));
+}
+.login-failed {
+    margin-top: 10px;
+    width: min(160px, 60vw);
+    height: auto;
+    filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.9));
+    align-self: center;
 }
 .auth-form button {
     align-self: flex-start;
@@ -618,7 +655,8 @@ a.sale-queue:hover {
 }
 .auth-form button:hover {
     transform: scale(1.06);
-    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
+    box-shadow: 0 0 18px rgba(255, 182, 213, 1), 0 0 36px rgba(255, 105, 180, 0.9);
+    text-shadow: 0 0 10px rgba(255, 210, 230, 1), 0 0 20px rgba(255, 105, 180, 0.95);
 }
 
 
@@ -643,7 +681,7 @@ a.sale-queue:hover {
 }
 .navbar a:hover {
     text-decoration: none;
-    text-shadow: 0 0 18px rgba(255, 210, 230, 1), 0 0 36px rgba(255, 105, 180, 1), 0 0 52px rgba(255, 20, 147, 1), 0 0 70px rgba(255, 20, 147, 0.95);
+    text-shadow: 0 0 18px rgba(255, 255, 255, 1), 0 0 32px rgba(255, 210, 230, 1), 0 0 48px rgba(255, 105, 180, 1), 0 0 70px rgba(255, 20, 147, 1);
 }
 
 /* -------
@@ -683,14 +721,48 @@ a.sale-queue:hover {
 .sidebar {
     width: 320px;
 }
-.sidebar img {
+.pfp-frame {
+    position: relative;
+    width: 100%;
+    margin-bottom: 18px;
+}
+.pfp-frame img:first-child {
     width: 100%;
     border: 3px solid #888;
     box-shadow: 0 0 10px rgba(0,0,0,0.25);
-    margin-bottom: 18px;
+    display: block;
 }
-.profile-page .sidebar img {
+.profile-page .pfp-frame img:first-child {
     box-shadow: 0 0 16px rgba(255, 182, 213, 0.8);
+}
+.pfp-decor {
+    position: absolute;
+    width: min(60px, 20%);
+    height: auto;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+    pointer-events: none;
+}
+.pfp-top-left {
+    top: -10px;
+    left: -10px;
+}
+.pfp-top-right {
+    top: -22px;
+    right: -10px;
+}
+.pfp-bottom-left {
+    bottom: -10px;
+    left: -10px;
+}
+.pfp-bottom-right {
+    bottom: -44px;
+    right: -10px;
+}
+
+/* Slightly larger top decorations */
+.pfp-top-left,
+.pfp-top-right {
+    width: min(70px, 24%);
 }
 .sidebar h2 {
     margin: 8px 0 12px;
@@ -765,8 +837,20 @@ a.sale-queue:hover {
     margin-top: 12px;
     font-size: 1rem;
 }
+.contact-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 .contact-list li {
     margin: 6px 0;
+}
+.contact-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 .contact-list a {
     color: inherit;
@@ -869,7 +953,7 @@ a.sale-queue:hover {
     border-bottom: 2px solid rgba(0,0,0,0.25);
     margin-bottom: 14px;
     font-size: 1.3rem;
-    text-shadow: 0 0 12px rgba(255, 182, 213, 0.95), 0 0 24px rgba(255, 105, 180, 0.9);
+    text-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 210, 230, 1), 0 0 42px rgba(255, 105, 180, 0.95);
 }
 .section-title-action {
     display: flex;
@@ -988,6 +1072,11 @@ a.sale-queue:hover {
     text-shadow: 0 0 18px rgba(255, 210, 230, 1), 0 0 36px rgba(255, 105, 180, 0.95), 0 0 54px rgba(255, 20, 147, 0.9);
     font-size: 1.4rem;
 }
+.home-page .site-credit,
+.login-page .site-credit,
+.signup-page .site-credit {
+    font-size: 1rem;
+}
 .friends-page-columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1090,7 +1179,8 @@ a.sale-queue:hover {
 }
 .friends-page-link:hover {
     transform: scale(1.06);
-    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
+    box-shadow: 0 0 18px rgba(255, 182, 213, 1), 0 0 36px rgba(255, 105, 180, 0.9);
+    text-shadow: 0 0 10px rgba(255, 210, 230, 1), 0 0 20px rgba(255, 105, 180, 0.95);
 }
 .friends-page-remove {
     padding: 10px 16px;
@@ -1099,7 +1189,8 @@ a.sale-queue:hover {
 }
 .friends-page-remove:hover {
     transform: scale(1.06);
-    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
+    box-shadow: 0 0 18px rgba(255, 182, 213, 1), 0 0 36px rgba(255, 105, 180, 0.9);
+    text-shadow: 0 0 10px rgba(255, 210, 230, 1), 0 0 20px rgba(255, 105, 180, 0.95);
 }
 
 /* Shopping page */

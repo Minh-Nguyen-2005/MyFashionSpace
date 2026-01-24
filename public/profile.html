@@ -17,7 +17,7 @@
         <a href="/yours-truly.html">Yours Truly</a> |
         <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Music</a> |
         <a href="/friends.html">Friends</a> |
-        <a href="#">Mail</a> |
+        <a href="https://antm.fandom.com/wiki/Main_Page" target="_blank" rel="noopener noreferrer">ANTM</a> |
         <a href="/profile">Profile</a>
     </div>
 
@@ -84,7 +84,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const isMe = me && String(me.id) === String(userId);
     const isOnline = isMe ? true : !!user.online;
     document.getElementById("profile-sidebar").innerHTML = `
-        <img src="${user.image || 'pictures/NGUYEN_MINH.jpg'}" alt="${user.first} ${user.last}">
+        <div class="pfp-frame">
+            <img src="${user.image || 'pictures/NGUYEN_MINH.jpg'}" alt="${user.first} ${user.last}">
+            <img class="pfp-decor pfp-top-left" src="/pictures/pfp3.gif" alt="">
+            <img class="pfp-decor pfp-top-right" src="/pictures/pfp2.gif" alt="">
+            <img class="pfp-decor pfp-bottom-left" src="/pictures/pfp.gif" alt="">
+            <img class="pfp-decor pfp-bottom-right" src="/pictures/pfp4.gif" alt="">
+        </div>
 
         <h2>${user.first} ${user.last}</h2>
         <p class="status">"${user.about || ''}"</p>
@@ -92,7 +98,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         <ul class="contact-list">
             <li><a class="contact-button" href="mailto:${user.first}.${user.last}@dartmouth.edu">Send Email</a></li>
             ${isMe ? '' : `<li><button id="addFriendBtn" class="add-friend-btn contact-button" data-profile-id="${userId}">Add Friend</button></li>`}
-            <li><a class="contact-button" href="#">Message</a></li>
+            <li class="contact-row">
+                <button id="clickMeBtn" class="contact-button" type="button">click me</button>
+                <span id="surpriseGif" class="surprise-gif hidden">
+                    <a href="https://www.glitter-graphics.com/myspace/text_generator.php" target="_blank" rel="noopener noreferrer">
+                        <img src="https://text.glitter-graphics.net/sc/g.gif" border="0" alt="g">
+                        <img src="https://text.glitter-graphics.net/sc/o.gif" border="0" alt="o">
+                        <img src="https://text.glitter-graphics.net/sc/o.gif" border="0" alt="o">
+                        <img src="https://text.glitter-graphics.net/sc/d.gif" border="0" alt="d">
+                        <img src="https://dl3.glitter-graphics.net/empty.gif" width="20" border="0" alt="">
+                        <img src="https://text.glitter-graphics.net/sc/b.gif" border="0" alt="b">
+                        <img src="https://text.glitter-graphics.net/sc/o.gif" border="0" alt="o">
+                        <img src="https://text.glitter-graphics.net/sc/y.gif" border="0" alt="y">
+                        <img src="https://text.glitter-graphics.net/sc/y.gif" border="0" alt="y">
+                        <img src="https://dl3.glitter-graphics.net/empty.gif" width="20" border="0" alt="">
+                    </a>
+                </span>
+            </li>
         </ul>
     `;
 
@@ -113,6 +135,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert(data.message || "Failed to add friend.");
             }
         });
+    }
+
+    const clickMeBtn = document.getElementById("clickMeBtn");
+    const surpriseGif = document.getElementById("surpriseGif");
+    if (clickMeBtn && surpriseGif) {
+        const show = () => surpriseGif.classList.remove("hidden");
+        const hide = () => surpriseGif.classList.add("hidden");
+        clickMeBtn.addEventListener("mousedown", show);
+        clickMeBtn.addEventListener("mouseup", hide);
+        clickMeBtn.addEventListener("mouseleave", hide);
+        clickMeBtn.addEventListener("touchstart", show);
+        clickMeBtn.addEventListener("touchend", hide);
     }
 
     // --- RENDER ABOUT / INTERESTS ---

@@ -17,9 +17,10 @@
         <input type="email" id="email" placeholder="Email" required>
         <div class="auth-field">
           <input type="password" id="password" placeholder="Password (min 8 chars)" minlength="8" required>
-          <button type="button" class="toggle-visibility" data-target="password" aria-label="Show password">👁</button>
+          <button type="button" class="toggle-visibility" data-target="password" aria-label="Show password"><img src="/pictures/eye.gif" alt=""></button>
         </div>
         <button type="submit">Log In</button>
+        <img id="login-failed" class="login-failed hidden" src="/pictures/failed.gif" alt="">
       </form>
     </div>
   </div>
@@ -38,7 +39,13 @@ document.getElementById("loginForm").onsubmit = async (e) => {
     body: JSON.stringify({ first, last, email, password })
   });
   const data = await res.json();
-  if (data.success) window.location = data.profileUrl;
+  const failed = document.getElementById("login-failed");
+  if (data.success) {
+    if (failed) failed.classList.add("hidden");
+    window.location = data.profileUrl;
+  } else if (failed) {
+    failed.classList.remove("hidden");
+  }
 };
 
 document.querySelector(".toggle-visibility").addEventListener("click", () => {
