@@ -1,3 +1,4 @@
-// Add your JavaScript code here
+// Author: Minh Nguyen
+// Backend Test
 
 console.log('Page loaded');

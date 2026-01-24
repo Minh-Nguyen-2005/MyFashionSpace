@@ -1,3 +1,6 @@
+// Author: Minh Nguyen
+// Backend
+
 (() => {
   const body = document.body;
   if (!body) return;
