@@ -135,7 +135,7 @@ Challenges along the way:
 ## AI Usage
 
 Did you use AI tools?
-- Yes.
+- Yes (Codex and Copilot).
 
 Example prompt and adaptation:
 - Prompt: "Create a queue-based bidding system where users can only increase their own bid, and the queue sorts highest to lowest."
