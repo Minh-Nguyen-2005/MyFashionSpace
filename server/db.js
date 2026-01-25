@@ -3,7 +3,7 @@
 
 const sqlite3 = require("sqlite3").verbose();
 
-const db = new sqlite3.Database("./site.db");
+const db = new sqlite3.Database(process.env.DB_PATH || "./site.db");
 
 function ensureUsersColumns(done) {
   db.all(`PRAGMA table_info(users)`, (err, columns) => {
