@@ -100,7 +100,7 @@ Recommended (persistent storage):
 6) Deploy.
 
 Temporary option (no persistence):
-- Set `DB_PATH` to `/tmp/site.db` (data can be wiped on restart).
+- Set `DB_PATH` to `/tmp/site.db` (**data can be wiped on restart, since I use free version**).
 
 ## Learning Journey
 
