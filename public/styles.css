@@ -116,6 +116,7 @@ body.profile-page {
 .surprise-gif {
     display: inline-flex;
     align-items: center;
+    margin-left: 6px;
     filter: drop-shadow(0 0 10px rgba(255, 182, 213, 0.9));
     pointer-events: auto;
 }
