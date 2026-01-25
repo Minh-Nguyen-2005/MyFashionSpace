@@ -52,7 +52,7 @@ The UI is intentionally loud and personal: a MySpace + Y2K + Barbie-inspired loo
 
 The backend centers on two core systems: Friending and Fashion Trading.
 
-Friending system:
+**Friending system**:
 - A friend request is stored as a row in `friends` with `status = pending`.
 - Accepting a request flips `status` to `accepted`, making the connection bidirectional.
 - Listing friends queries accepted relationships in both directions.
@@ -60,7 +60,7 @@ Friending system:
 
 This avoids duplicate rows per direction while supporting a real request/accept flow. The logic ensures users cannot add themselves or send repeated requests.
 
-Fashion Trading system:
+**Fashion Trading system**:
 - Users upload items to their personal Fashion list (name + image).
 - When selling, an item is added to `sales` with a floor price and becomes visible on Shopping.
 - Buyers place bids in a queue. The system enforces:
