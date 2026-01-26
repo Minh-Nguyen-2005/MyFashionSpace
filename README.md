@@ -177,7 +177,7 @@ Temporary option (no persistence):
 
 **Inspiration**:
 
-There's currently no active fashion/modeling clubs or spaces on Dartmouth campus. I love fashion, tech, and finance. So what's a better idea to bring my world to the Dartmouth community through a website where people can trade and auction fashion designs, in a lot of GLITTERS, CUNTY MUSIC, and 2000's nostalgia?
+There's currently no active fashion/modeling clubs or spaces on Dartmouth campus. I love fashion, tech, and finance. So what's a better idea to bring my world to the Dartmouth community through a website where people can trade and auction fashion designs, in a lot of GLITTERS, CUNTY MUSIC, and 2000's nostalgia? This full-stack project is a mesh between a Social Media and My Own Adventure Spice.
 
 **Potential impact**:
 
