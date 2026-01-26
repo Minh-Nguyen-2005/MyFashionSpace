@@ -924,16 +924,23 @@ a.sale-queue:hover {
     z-index: 50;
 }
 .friend-picker-modal {
-    width: min(520px, 90%);
+    width: min(620px, 92vw);
+    max-height: 85vh;
     background: rgba(0,0,0,0.45);
     border: 2px solid #000;
     box-shadow: 0 0 12px rgba(0,0,0,0.3);
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 .friend-picker-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    overflow-y: auto;
+    padding-right: 6px;
+    max-height: calc(85vh - 90px);
 }
 .friend-picker-status {
     margin-left: auto;
@@ -1202,6 +1209,9 @@ a.sale-queue:hover {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 16px;
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
+    padding-right: 6px;
 }
 .market-card {
     background: rgba(255,255,255,0.45);

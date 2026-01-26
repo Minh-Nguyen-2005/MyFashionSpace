@@ -1,10 +1,14 @@
 # MyFashionSpace
 
-A full-stack, Y2K-inspired social fashion network where users build profiles, connect with friends, and trade fashion items through a bidding marketplace. The site blends MySpace nostalgia with a modern fashion-trading flow: users upload items to their personal Fashion closet, list them for sale with a floor price, and compete in a queue-based bidding system.
+A full-stack, Y2K-inspired social fashion network where users build profiles, connect with friends, and trade fashion items through a auction marketplace. The site blends MySpace nostalgia with a modern fashion-trading flow: users upload items to their personal Fashion closet, list them for sale with a floor price, and compete in a queue-based bidding system.
 
-Deployed application: https://myfashionspace.onrender.com/
+Deployed application: https://myfashionspace.onrender.com/ 
+
+Notes: You might have to wait 50s for Render to launch the website. I would recommend using the site locally, if you don't want your data to disappear.
 
 ## Screenshots / Demo
+
+[![Demo video](https://img.youtube.com/vi/3P6Smi5tTdI/0.jpg)](https://youtu.be/3P6Smi5tTdI)
 
 
 ## Setup (Local)
@@ -46,7 +50,7 @@ All APIs are implemented in `server/routes.js`, with DB queries in `server/db.js
 
 ## Frontend Design + Implementation
 
-The UI is intentionally loud and personal: a MySpace + Y2K + Barbie-inspired look with glitter, pink glow, and playful imagery. Pages use animated accents, sparkling text, and sticker-like decorations to feel handcrafted and nostalgic. Buttons, section headers, and hover states emphasize glow effects and soft gradients to match the chic, fashion-forward theme. The design is built directly in HTML/CSS with custom sections per page and themed backgrounds to keep the vibe consistent across the site.
+The UI is **my style**: a MySpace + Y2K + Barbie-inspired look with glitter, pink glow, and playful imagery. Pages use animated accents, sparkling text, and sticker-like decorations to feel handcrafted and nostalgic. Buttons, section headers, and hover states emphasize glow effects and soft gradients to match the chic, fashion-forward theme. The design is built directly in HTML/CSS with custom sections per page and themed backgrounds to keep the vibe consistent across the site.
 
 ## Backend Design + Implementation
 
@@ -106,8 +110,12 @@ Temporary option (no persistence):
 
 Inspiration:
 
+I love fashion, tech, and finance. So what's a better idea to bring my world to life through a website where people can trade and auction fashion designs, in a lot of GLITTERS and CUNTY MUSIC?
+
 
 Potential impact:
+
+This has a huge impact on my life. Finally seeing my vision and passion is fulfilling. This is a vivacious idea, and I believe it can bring fashion girlies together and create a voluptuous community.
 
 
 New technology learned and why:
@@ -127,10 +135,10 @@ Hardest bug and how I debugged it:
 - The Add Friend logic: avoiding duplicates while supporting pending requests required careful queries. I debugged by logging each query, inspecting results, and ensuring only one row exists per user pair. The fix was to enforce a single row with a `status` field rather than storing both directions.
 
 Challenges along the way:
-- Implementing the Shopping/Queue/Fashion/Sale flow in a consistent DB model.
-- Keeping background music consistent across navigation and browser history.
-- Building a basic authentication system with email/password validation.
-- Maintaining a cohesive, highly stylized UI across screens and device sizes.
+- Shopping/Queue/Fashion/Sale flow: Situation: multiple pages needed to stay in sync with listings, bids, and ownership; Task: design a consistent data model; Action: split data into `items`, `sales`, and `bids` tables and enforced bid rules server-side; Result: the marketplace stays consistent and queue ordering is reliable.
+- Background music across navigation: Situation: music would restart or desync during navigation; Task: keep playback continuous within page groups; Action: used a shared audio controller and stored playback state/mute in browser storage; Result: music remains consistent across back/forward navigation.
+- Authentication with validation: Situation: login needed to match multiple fields with basic security; Task: validate email format and password length while keeping UX simple; Action: enforced checks on both client and server and blocked mismatches; Result: logins are reliable and bad input is rejected early.
+- Cohesive UI across devices: Situation: the Y2K design broke on smaller screens; Task: preserve the aesthetic while staying responsive; Action: refit layouts with responsive sizing, scrollable panels, and consistent glow styles; Result: the theme remains intact on phones and desktops.
 
 ## AI Usage
 
