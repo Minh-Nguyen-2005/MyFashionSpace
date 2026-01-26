@@ -10,6 +10,8 @@ Notes: You might have to wait 50s for Render to launch the website. I would reco
 
 [![Demo video](https://img.youtube.com/vi/3P6Smi5tTdI/0.jpg)](https://youtu.be/3P6Smi5tTdI)
 
+Visit **MyFashionSpace** yourself and create an account for full on fashion-esque experience (since this screenrecord is muted).
+
 
 ## Setup (Local)
 
