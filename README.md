@@ -1,16 +1,16 @@
 # MyFashionSpace
 
-A full-stack, Y2K-inspired social fashion network where users build profiles, connect with friends, and trade fashion items through a auction marketplace. The site blends MySpace nostalgia with a modern fashion-trading flow: users upload items to their personal Fashion closet, list them for sale with a floor price, and compete in a queue-based bidding system.
+Welcome to my online run-way show! A full-stack, Y2K social fashion network where fashionistas build profiles, connect with friends, and trade fashion items through a auction marketplace. The site took some inspo from **MySpace** with **my twist**, a modern fashion-trading flow: users upload items to their personal Fashion closet, list them for sale with a floor price, and compete in a queue-based bidding system.
 
-Deployed application: https://myfashionspace.onrender.com/ 
+**Deployed application**: https://myfashionspace.onrender.com/ 
 
-Notes: You might have to wait 50s for Render to launch the website. I would recommend using the site locally, if you don't want your data to disappear.
+Notes: You might have to wait ~50s for Render to launch the website. Since the demo website is active on Render Free, no data is recorded on there. Thus, I would recommend using the site locally, to interact with data already created by me in there.
 
 ## Screenshots / Demo
 
 [![Demo video](https://img.youtube.com/vi/3P6Smi5tTdI/0.jpg)](https://youtu.be/3P6Smi5tTdI)
 
-Visit **MyFashionSpace** yourself and create an account for full on fashion-esque experience (since this screenrecord is muted).
+Visit **MyFashionSpace** yourself and create an account for full on fashion-esque experience with A LOT OF model friends to add and fashion pieces to buy, and that you can actually enjoy the music when using the website (since this screenrecord is muted).
 
 
 ## Setup (Local)
@@ -33,6 +33,57 @@ Steps:
 Notes:
 - Local data is stored in `site.db` (SQLite).
 - If you want to change the DB path, set `DB_PATH` in your environment.
+
+## Usage
+
+1) **Home**  
+   Land on the Home page, then choose **Log in** or **Sign up**.
+
+2) **Sign up / Log in**  
+   Create a profile with your name, email, password, and profile image. Log in using the same details.
+
+3) **Profile**  
+   View your profile, edit your About/Interests blurbs, and see your current status.
+
+4) **Friends**  
+   - Click **Add Friend** to browse people and send requests.  
+   - Review **Friend Requests** to accept or decline.  
+   - Manage friends from **My Friends**.
+
+5) **Fashion**  
+   Your personal closet. Upload items, view them full-screen, or list them for sale with a floor price.
+
+6) **Shopping**  
+   Browse items listed by others. Click an item to open its **Queue** page and place a bid above the floor price.
+
+7) **Queue**  
+   See competing bids in real time. If you already bid, your new bid must be higher to replace your old one.
+
+8) **Sale**  
+   Track your active listings and accept a buyer’s bid to complete a trade.
+
+9) **Yours Truly**  
+   Author's signature page with themed visuals (ME).
+
+10) **Music**  
+   Music autoplays per page group. Use the icon to mute/unmute globally.
+
+## Files
+
+- `server/server.js` — Express app entry point.
+- `server/routes.js` — API routes for auth, friends, and trading.
+- `server/db.js` — SQLite initialization, migrations, and queries.
+- `public/` — Frontend HTML/CSS/JS and assets.
+- `public/styles.css` — Global styling and theme.
+- `public/script.js` — Frontend behavior (music, UI interactions).
+- `public/*.html` — Page templates (Home, Profile, Friends, Shopping, Fashion, Sale, Queue, etc.).
+- `public/pictures/` — Images and decorative assets.
+- `public/music/` — Audio files for background music.
+- `public/uploads/` — Uploaded images.
+- `site.db` — Local SQLite database file.
+- `package.json` / `package-lock.json` — Dependencies and scripts.
+- `render.yaml` — Render deployment configuration.
+- `test/` — Local test pages and styling experiments.
 
 ## Frameworks and Tools
 
@@ -78,6 +129,20 @@ This avoids duplicate rows per direction while supporting a real request/accept 
 
 This structure mirrors real trading mechanics while keeping the database simple and fast for a small social network.
 
+**Algorithms / data structures used**:
+- Relational tables (`users`, `friends`, `items`, `sales`, `bids`) as the core data model.
+- Friend request state machine using a `status` field (`pending` → `accepted`) to avoid duplicate edges.
+- De‑duplication logic for friend requests (single row per user pair) using guarded inserts and checks.
+- Priority ordering of bids using SQL `ORDER BY bid DESC` to show highest‑to‑lowest (queue behavior).
+- Replacement update for bids (if a user already bid, only a higher bid replaces their previous row).
+- Filtering and joins to compute relationships (friends vs. pending vs. incoming requests).
+
+**Efficiency considerations**:
+- Most reads are single-table queries or simple joins keyed by user or item IDs, which keeps lookup costs low for the expected scale.
+- Bid queues are ordered in SQL so the server returns already-sorted results; the client only renders.
+- Friend status checks avoid extra rows by using a single relationship record per pair, reducing storage and query work.
+- SQLite is fast for small-to-medium datasets and the app favors denormalized display (few queries per page) to keep page loads responsive.
+
 ## Data Storage
 
 SQLite is used for all persistent data:
@@ -110,15 +175,15 @@ Temporary option (no persistence):
 
 ## Learning Journey
 
-Inspiration:
+**Inspiration**:
 
-I love fashion, tech, and finance. So what's a better idea to bring my world to life through a website where people can trade and auction fashion designs, in a lot of GLITTERS and CUNTY MUSIC?
+There's currently no active fashion/modeling clubs or spaces on Dartmouth campus. I love fashion, tech, and finance. So what's a better idea to bring my world to the Dartmouth community through a website where people can trade and auction fashion designs, in a lot of GLITTERS, CUNTY MUSIC, and 2000's nostalgia?
 
-
-Potential impact:
+**Potential impact**:
 
 This has a huge impact on my life. Finally seeing my vision and passion is fulfilling. This is a vivacious idea, and I believe it can bring fashion girlies together and create a voluptuous community.
 
+On Dartmouth’s campus, **MyFashionSpace** could create a playful, student-run marketplace for fashion and self‑expression. It can spark community around creativity, help students showcase personal style through customizing their own space, and even encourage sustainable reuse of clothing by making trading feel fun, social, and local. Imagine the (Free) Market on campus or Fizz's Marketplace but with FASHION and GLITTER !!
 
 New technology learned and why:
 - SQLite: chosen for a lightweight, file-based DB that is easy to run locally and deploy.
@@ -150,6 +215,10 @@ Did you use AI tools?
 Example prompt and adaptation:
 - Prompt: "Create a queue-based bidding system where users can only increase their own bid, and the queue sorts highest to lowest."
 - Adaptation: I refactored the generated SQL into a single upsert-style flow in my routes, added explicit checks for floor price, and tied the response to the existing sale data model to avoid duplication.
+
+## Future Plans
+
+Incorporate and API-serve AI/ML vision model in classifying fashion (i.e., clothes, jewelry, heels, bags, etc.) vs. non-fashion (tomatoes, pans, toothpaste, books, phones, etc.) items uploaded to the space to detect and prevent trades that go against the website's theme and purpose.
 
 ---
 
