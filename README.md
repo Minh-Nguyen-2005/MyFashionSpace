@@ -112,7 +112,7 @@ Temporary option (no persistence):
 
 Inspiration:
 
-I love fashion, tech, and finance. So what's a better idea to bring my world to life through a website where people can trade and auction fashion designs, in a lot of GLITTERS and CUNTY MUSIC?
+I love fashion, tech, and finance. So what's a better idea to bring my world to life through a website where people can trade and auction fashion designs, in a lot of GLITTERS and CUNTY MUSIC? This full-stack project is a mesh between a Social Media and My Own Adventure Spice.
 
 
 Potential impact:
