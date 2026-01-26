@@ -187,6 +187,21 @@ On Dartmouth’s campus, **MyFashionSpace** could create a playful, student-run 
 
 New technology learned and why:
 - SQLite: chosen for a lightweight, file-based DB that is easy to run locally and deploy.
+- Express sessions: learned how to keep users logged in across page navigation with server-side session state.
+- Render deployment: learned how to deploy a Node + SQLite app and handle persistent storage configuration.
+- Browser audio handling: learned how autoplay policies work and how to persist playback/mute state across navigation.
+
+Learning highlights (Frontend):
+- Building an intuitive, responsive UI: I learned how to make a highly stylized, Y2K-heavy, personal interface still work across different screen sizes by adjusting layouts, adding scrollable panels, and tuning typography/glow effects with CSS.
+- Dynamic UI + backend interaction: I implemented interactive flows like editing profile blurbs in place, accepting/declining friend requests, and live “Add Friend” lists that update based on server data.
+- Interactivity beyond static HTML/CSS: I learned how to wire JS behaviors (music state — consistency when navigating forward/backward using outside interfaces like Chrome or Safari, animations (CSS and GIPHYs stored in `public/pictures`), LED lights, sparkling titles, hover glows, overlay modals) so the site feels alive rather than just a static page.
+- Docs/tutorials referenced: I relied on official docs (MDN for audio/autoplay and DOM events, Express + SQLite docs for backend integration) to resolve edge cases like autoplay restrictions and session persistence.
+
+Learning highlights (Backend):
+- API endpoints: I learned to design and wire up multiple endpoints for signup/login, friend requests, profile updates, and the marketplace flows (upload, sell, bid, accept).
+- Data persistence: I learned how to structure a SQLite schema that supports relational features (users ↔ friends ↔ bids) and how to write queries that keep data consistent across multiple pages.
+- Server-side logic: I implemented guardrails like bid validation, friend request de-duplication, and status transitions that only the server can enforce safely.
+- External services: I linked Spotify and ANTM as external destinations from the UI. I did not yet implement a server‑side third‑party API (with keys) in this version, but I would like to add one (e.g., GIPHY search or Spotify metadata) as a future backend enhancement.
 
 ## Technical Rationale
 
