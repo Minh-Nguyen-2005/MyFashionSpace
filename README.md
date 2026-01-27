@@ -6,7 +6,7 @@ Welcome to my online run-way show! A full-stack, Y2K social fashion network wher
 
 Notes: You might have to wait ~50s for Render to launch the website. Since the demo website is active on Render Free, no data is recorded on there. Thus, I would recommend using the site locally, to interact with data already created by me in there.
 
-## Screenshots / Demo
+## Demo Video
 
 [![Demo video](https://img.youtube.com/vi/3P6Smi5tTdI/0.jpg)](https://youtu.be/3P6Smi5tTdI)
 
