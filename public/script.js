@@ -1,5 +1,5 @@
 // Author: Minh Nguyen
-// Backend
+// Frontend behaviors
 
 (() => {
   const body = document.body;

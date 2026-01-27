@@ -70,9 +70,11 @@ Notes:
 
 ## Files
 
+- `server/` - Backend
 - `server/server.js` — Express app entry point.
 - `server/routes.js` — API routes for auth, friends, and trading.
 - `server/db.js` — SQLite initialization, migrations, and queries.
+
 - `public/` — Frontend HTML/CSS/JS and assets.
 - `public/styles.css` — Global styling and theme.
 - `public/script.js` — Frontend behavior (music, UI interactions).
@@ -80,6 +82,7 @@ Notes:
 - `public/pictures/` — Images and decorative assets.
 - `public/music/` — Audio files for background music.
 - `public/uploads/` — Uploaded images.
+
 - `site.db` — Local SQLite database file.
 - `package.json` / `package-lock.json` — Dependencies and scripts.
 - `render.yaml` — Render deployment configuration.
