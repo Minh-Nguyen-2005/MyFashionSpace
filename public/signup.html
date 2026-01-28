@@ -33,6 +33,7 @@
       <label for="image">Profile Picture:</label>
       <input type="file" id="image" name="image" accept="image/*" required>
       <button type="submit">Sign Up</button>
+      <img id="signup-failed" class="login-failed hidden" src="/pictures/failed.gif" alt="">
     </form>
   </div>
 </div>
@@ -44,8 +45,9 @@ document.getElementById("signupForm").onsubmit = async (e) => {
   const form = document.getElementById("signupForm");
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
+  const failed = document.getElementById("signup-failed");
   if (password !== confirmPassword) {
-    alert("Passwords do not match");
+    if (failed) failed.classList.remove("hidden");
     return;
   }
   const formData = new FormData(form);
@@ -57,9 +59,10 @@ document.getElementById("signupForm").onsubmit = async (e) => {
 
   const data = await res.json();
   if (data.success) {
+    if (failed) failed.classList.add("hidden");
     window.location = data.profileUrl;
   } else {
-    alert("Sign up failed" + data.error);
+    if (failed) failed.classList.remove("hidden");
   }
 };
 

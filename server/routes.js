@@ -24,7 +24,22 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const allowedImageTypes = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp'
+]);
+
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    if (allowedImageTypes.has(file.mimetype)) {
+      return cb(null, true);
+    }
+    return cb(new Error('Unsupported image format. Use JPG, PNG, GIF, or WEBP.'));
+  }
+});
 
 const itemStorage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -89,38 +104,60 @@ module.exports = function (app, db) {
   });
 
   // SIGN UP
-  app.post("/signup", upload.single('image'), (req, res) => {
-    const { first, last, about, interests, email, password } = req.body;
-    let imagePath = null;
-
-    if (!first || !last || !email || !password) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({ error: "Invalid email format" });
-    }
-    if (String(password).length < 8) {
-      return res.status(400).json({ error: "Password must be at least 8 characters" });
-    }
-
-    if (req.file) {
-      // store file path relative to public
-      imagePath = `/uploads/${req.file.filename}`;
-    }
-
-    db.run(
-      `INSERT INTO users (first, last, about, interests, image, email, password, online) VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
-      [first, last, about, interests, imagePath, email, password],
-      function (err) {
-        if (err) return res.status(500).json({ error: err.message });
-
-        req.session.userId = this.lastID;
-        res.json({
-          success: true,
-          profileUrl: `/profile.html?id=${this.lastID}`
-        });
+  app.post("/signup", (req, res) => {
+    upload.single('image')(req, res, (uploadErr) => {
+      if (uploadErr) {
+        return res.status(400).json({ error: uploadErr.message });
       }
-    );
+
+      const { first, last, about, interests, email, password } = req.body;
+      let imagePath = null;
+
+      if (!first || !last || !email || !password) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ error: "Invalid email format" });
+      }
+      if (String(password).length < 8) {
+        return res.status(400).json({ error: "Password must be at least 8 characters" });
+      }
+
+      if (req.file) {
+        // store file path relative to public
+        imagePath = `/uploads/${req.file.filename}`;
+      }
+
+      db.get(
+        `SELECT id FROM users
+         WHERE lower(email) = lower(?)
+            OR (lower(first) = lower(?) AND lower(last) = lower(?))
+         LIMIT 1`,
+        [email, first, last],
+        (err, existing) => {
+          if (err) return res.status(500).json({ error: err.message });
+          if (existing) {
+            return res.status(409).json({
+              error: "Email or full name already exists"
+            });
+          }
+
+          db.run(
+            `INSERT INTO users (first, last, about, interests, image, email, password, online) VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
+            [first, last, about, interests, imagePath, email, password],
+            function (err) {
+              if (err) return res.status(500).json({ error: err.message });
+
+              req.session.userId = this.lastID;
+              res.json({
+                success: true,
+                profileUrl: `/profile.html?id=${this.lastID}`
+              });
+            }
+          );
+        }
+      );
+    });
   });
 
   // LOGOUT

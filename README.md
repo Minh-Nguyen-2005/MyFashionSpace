@@ -223,6 +223,8 @@ On Dartmouth’s campus, **MyFashionSpace** could create a playful, student-run 
 - Shopping/Queue/Fashion/Sale flow: Situation: multiple pages needed to stay in sync with listings, bids, and ownership; Task: design a consistent data model; Action: split data into `items`, `sales`, and `bids` tables and enforced bid rules server-side; Result: the marketplace stays consistent and queue ordering is reliable.
 - Background music across navigation: Situation: music would restart or desync during navigation; Task: keep playback continuous within page groups; Action: used a shared audio controller and stored playback state/mute in browser storage; Result: music remains consistent across back/forward navigation.
 - Authentication with validation: Situation: login needed to match multiple fields with basic security; Task: validate email format and password length while keeping UX simple; Action: enforced checks on both client and server and blocked mismatches; Result: logins are reliable and bad input is rejected early.
+
+Sign‑up bug fixes: Situation: duplicate emails or identical first+last combinations caused friend‑system confusion, and HEIC profile photos failed to render; Task: make sign‑ups unique and reject unsupported image formats; Action: added server‑side uniqueness checks for email and full name, plus an upload filter for JPG/PNG/GIF/WEBP; Result: duplicates are blocked, users see a clear failed state, and profile images consistently render.
 - Cohesive UI across devices: Situation: the Y2K design broke on smaller screens; Task: preserve the aesthetic while staying responsive; Action: refit layouts with responsive sizing, scrollable panels, and consistent glow styles; Result: the theme remains intact on phones and desktops.
 
 ## AI Usage
