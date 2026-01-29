@@ -46,7 +46,18 @@
       : '<img src="/pictures/music.gif" alt="Playing">';
   };
   renderToggle();
-  document.body.appendChild(toggle);
+
+  if (!isAuthGroup) {
+    const navbar = document.querySelector(".navbar");
+    if (navbar) {
+      toggle.classList.add("audio-toggle--nav");
+      navbar.appendChild(toggle);
+    } else {
+      document.body.appendChild(toggle);
+    }
+  } else {
+    document.body.appendChild(toggle);
+  }
 
   if (!document.querySelector(".site-credit")) {
     const credit = document.createElement("div");

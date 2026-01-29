@@ -28,6 +28,8 @@ body, html {
     background-color: #f7f2f6;
     color: var(--text-color);
     height: 100%;
+    position: relative;
+    overflow-x: hidden;
 }
 
 /* Profile Page Background (change this image path) */
@@ -76,6 +78,23 @@ body.profile-page {
     display: block;
     filter: drop-shadow(0 0 10px rgba(255, 182, 213, 0.9));
 }
+.audio-toggle--nav {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    z-index: 2;
+}
+.audio-toggle--nav img {
+    width: 48px;
+    height: 48px;
+}
+.audio-toggle--nav:hover,
+.audio-toggle--nav:active {
+    transform: translateY(-50%) scale(1.06);
+}
 .audio-toggle:hover {
     box-shadow: 0 0 24px rgba(255, 182, 213, 1), 0 0 48px rgba(255, 105, 180, 1), 0 0 72px rgba(255, 20, 147, 0.95) !important;
     transform: scale(1.08);
@@ -83,6 +102,10 @@ body.profile-page {
 .audio-toggle:active {
     box-shadow: 0 0 30px rgba(255, 182, 213, 1), 0 0 60px rgba(255, 105, 180, 1), 0 0 90px rgba(255, 20, 147, 1) !important;
     transform: scale(1.1);
+}
+.audio-toggle.audio-toggle--nav:hover,
+.audio-toggle.audio-toggle--nav:active {
+    transform: translateY(-50%) scale(1.06);
 }
 
 #audio-start-overlay {
@@ -197,7 +220,8 @@ body.home-page {
     min-height: 100vh;
     background-attachment: scroll;
     font-family: 'Snell Roundhand', cursive;
-    font-size: 2.25rem;
+    font-size: clamp(1rem, 3.5vw, 1.6rem);
+    position: relative;
 }
 
 /* Log-in Page Background (change this image path) */
@@ -205,7 +229,7 @@ html.login-page,
 body.login-page {
     background-image: url('pictures/glitter14.gif');
     font-family: 'Snell Roundhand', cursive;
-    font-size: 2.25rem;
+    font-size: clamp(1rem, 3.5vw, 1.6rem);
     background-repeat: repeat;
     background-size: auto;
 }
@@ -215,7 +239,7 @@ html.signup-page,
 body.signup-page {
     background-image: url('pictures/glitter14.gif');
     font-family: 'Snell Roundhand', cursive;
-    font-size: 2.25rem;
+    font-size: clamp(1rem, 3.5vw, 1.6rem);
     background-repeat: repeat;
     background-size: auto;
 }
@@ -322,7 +346,7 @@ body.friends-page {
     justify-content: center;
 }
 .welcome-img {
-    width: min(320px, 80vw);
+    width: clamp(120px, 38vw, 220px);
     height: auto;
     display: block;
     filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.85));
@@ -330,7 +354,7 @@ body.friends-page {
 .welcome-subtitle {
     color: #ffe6f2;
     font-family: "Snell Roundhand", "Apple Chancery", "Brush Script MT", cursive;
-    font-size: 2.6rem;
+    font-size: clamp(1.6rem, 6vw, 2.6rem);
     letter-spacing: 0.5px;
     margin-top: 56px;
     text-shadow: 0 0 8px rgba(255, 95, 162, 0.6);
@@ -340,10 +364,10 @@ body.friends-page {
     gap: 2px;
 }
 .welcome-to {
-    font-size: 1.2rem;
+    font-size: clamp(0.85rem, 3vw, 1.2rem);
 }
 .welcome-name {
-    font-size: 3rem;
+    font-size: clamp(3rem, 14vw, 6rem);
     text-align: center;
     text-shadow: 0 0 20px rgba(255, 230, 242, 1), 0 0 40px rgba(255, 105, 180, 1), 0 0 60px rgba(255, 20, 147, 0.95), 0 0 90px rgba(255, 20, 147, 0.9);
     position: relative;
@@ -377,33 +401,33 @@ body.friends-page {
     flex-wrap: wrap;
 }
 .home-butterflies {
-    position: fixed;
+    position: absolute;
     top: 40%;
-    width: min(200px, 28vw);
+    width: clamp(120px, 22vw, 200px);
     height: auto;
     filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.9));
     pointer-events: none;
 }
 .home-butterflies-left {
-    left: 48px;
+    left: clamp(8px, 3vw, 48px);
 }
 .home-butterflies-right {
-    right: 48px;
+    right: clamp(8px, 3vw, 48px);
 }
 .home-bird {
-    position: fixed;
-    top: 18px;
-    left: 18px;
-    width: min(200px, 30vw);
+    position: absolute;
+    top: clamp(8px, 2vw, 18px);
+    left: clamp(8px, 2vw, 18px);
+    width: clamp(120px, 24vw, 200px);
     height: auto;
     filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.9));
     pointer-events: none;
 }
 .home-horse {
-    position: fixed;
-    bottom: 18px;
-    left: 18px;
-    width: min(220px, 32vw);
+    position: absolute;
+    bottom: clamp(8px, 2vw, 18px);
+    left: clamp(8px, 2vw, 18px);
+    width: clamp(140px, 26vw, 220px);
     height: auto;
     filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.9));
     pointer-events: none;
@@ -451,6 +475,48 @@ body.friends-page {
     56% {
         opacity: 0.85;
         text-shadow: 0 0 12px rgba(255, 230, 242, 0.85), 0 0 22px rgba(255, 105, 180, 0.75);
+    }
+}
+
+@keyframes header-sparkle {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.9),
+                     0 0 24px rgba(255, 182, 213, 1),
+                     0 0 42px rgba(255, 105, 180, 1),
+                     0 0 64px rgba(255, 20, 147, 0.95);
+    }
+    45% {
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
+                     0 0 18px rgba(255, 182, 213, 0.85),
+                     0 0 30px rgba(255, 105, 180, 0.85),
+                     0 0 46px rgba(255, 20, 147, 0.8);
+    }
+    70% {
+        text-shadow: 0 0 14px rgba(255, 255, 255, 1),
+                     0 0 30px rgba(255, 182, 213, 1),
+                     0 0 52px rgba(255, 105, 180, 1),
+                     0 0 78px rgba(255, 20, 147, 1);
+    }
+}
+
+@keyframes header-sparkle-white {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.95),
+                     0 0 24px rgba(255, 255, 255, 0.95),
+                     0 0 42px rgba(255, 255, 255, 0.9),
+                     0 0 64px rgba(255, 255, 255, 0.85);
+    }
+    45% {
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.8),
+                     0 0 18px rgba(255, 255, 255, 0.85),
+                     0 0 30px rgba(255, 255, 255, 0.8),
+                     0 0 46px rgba(255, 255, 255, 0.75);
+    }
+    70% {
+        text-shadow: 0 0 14px rgba(255, 255, 255, 1),
+                     0 0 30px rgba(255, 255, 255, 0.95),
+                     0 0 52px rgba(255, 255, 255, 0.9),
+                     0 0 78px rgba(255, 255, 255, 0.85);
     }
 }
 
@@ -514,6 +580,8 @@ a.sale-queue {
     display: inline-block;
     text-decoration: none;
     padding: 10px 16px;
+    transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, text-shadow 0.08s ease-out;
+    will-change: transform, box-shadow, text-shadow;
 }
 
 button:hover,
@@ -547,6 +615,7 @@ a.sale-queue:hover {
 }
 .login-page h2 {
     text-shadow: 0 0 14px rgba(255, 182, 213, 0.95), 0 0 28px rgba(255, 105, 180, 0.7);
+    font-size: clamp(2.4rem, 12vw, 4.8rem);
 }
 .login-page .auth-card {
     align-items: center;
@@ -561,6 +630,7 @@ a.sale-queue:hover {
 }
 .signup-page h2 {
     text-shadow: 0 0 14px rgba(255, 182, 213, 0.95), 0 0 28px rgba(255, 105, 180, 0.7);
+    font-size: clamp(2.4rem, 12vw, 4.8rem);
 }
 .signup-page .auth-card {
     align-items: center;
@@ -585,9 +655,9 @@ a.sale-queue:hover {
 }
 .auth-form input,
 .auth-form textarea {
-    padding: 8px;
+    padding: clamp(6px, 2.5vw, 10px);
     border: 1px solid rgba(0,0,0,0.3);
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2.6vw, 1.1rem);
     font-family: Arial, sans-serif;
     font-weight: normal;
 }
@@ -653,8 +723,9 @@ a.sale-queue:hover {
     background-position: center;
     color: #fff;
     border: none;
-    padding: 8px 14px;
-    font-weight: bold;
+    padding: clamp(7px, 2.5vw, 10px) clamp(12px, 4vw, 18px);
+    font-weight: normal;
+    font-size: clamp(0.95rem, 2.8vw, 1.15rem);
     cursor: pointer;
 }
 .auth-form button:hover {
@@ -679,6 +750,7 @@ a.sale-queue:hover {
     position: sticky;
     top: 0;
     z-index: 100;
+    overflow: hidden;
 }
 .navbar a {
     color: #fff;
@@ -740,7 +812,7 @@ a.sale-queue:hover {
     display: block;
 }
 .profile-page .pfp-frame img:first-child {
-    box-shadow: 0 0 16px rgba(255, 182, 213, 0.8);
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.85), 0 0 28px rgba(255, 182, 213, 0.9), 0 0 42px rgba(255, 105, 180, 0.8);
 }
 .pfp-decor {
     position: absolute;
@@ -1027,9 +1099,12 @@ a.sale-queue:hover {
     object-fit: contain;
     box-shadow: 0 0 18px rgba(255, 182, 213, 0.9), 0 0 36px rgba(255, 105, 180, 0.9);
 }
+.yours-truly-img:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.95), 0 0 34px rgba(255, 182, 213, 0.95), 0 0 52px rgba(255, 105, 180, 0.9);
+}
 .yours-truly-decor {
     position: absolute;
-    width: 170px;
+    width: clamp(90px, 14vw, 170px);
     height: auto;
     pointer-events: none;
     filter: drop-shadow(0 0 12px rgba(255, 182, 213, 0.95));
@@ -1075,7 +1150,7 @@ a.sale-queue:hover {
 }
 .decor-bottom-right {
     bottom: -24px;
-    right: -92px;
+    right: -56px;
 }
 .yours-truly-credit {
     position: fixed;
@@ -1089,7 +1164,10 @@ a.sale-queue:hover {
 .home-page .site-credit,
 .login-page .site-credit,
 .signup-page .site-credit {
-    font-size: 1rem;
+    position: absolute;
+    right: 12px;
+    bottom: 10px;
+    font-size: clamp(0.6rem, 1.8vw, 0.85rem);
 }
 .friends-page-columns {
     display: grid;
@@ -1104,6 +1182,7 @@ a.sale-queue:hover {
 }
 .friends-page .container {
     max-width: 1250px;
+    width: 95%;
 }
 .friends-page-list,
 .friends-requests-list {
@@ -1138,8 +1217,8 @@ a.sale-queue:hover {
     min-height: 137px;
 }
 .friends-request-card img {
-    width: 70px;
-    height: 90px;
+    width: 90px;
+    height: 110px;
     object-fit: cover;
     border: 2px solid rgba(0,0,0,0.25);
 }
@@ -1225,12 +1304,14 @@ a.sale-queue:hover {
 }
 .market-card img {
     width: 100%;
-    height: 220px;
+    aspect-ratio: 3 / 4;
+    height: auto;
     object-fit: cover;
     border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.6);
 }
 .market-card:hover img {
-    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 0 28px rgba(255, 182, 213, 0.95), 0 0 44px rgba(255, 105, 180, 0.9);
 }
 .market-name {
     margin-top: 10px;
@@ -1288,16 +1369,19 @@ a.sale-queue:hover {
 }
 .fashion-card img {
     width: 100%;
-    height: 220px;
+    aspect-ratio: 3 / 4;
+    height: auto;
     object-fit: cover;
     border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.6);
 }
 .fashion-card:hover img {
-    box-shadow: 0 0 12px rgba(255, 182, 213, 0.8);
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 0 28px rgba(255, 182, 213, 0.95), 0 0 44px rgba(255, 105, 180, 0.9);
 }
 .fashion-name {
     font-weight: bold;
     margin: 8px 0;
+    text-align: center;
 }
 
 /* Fashion page text styling */
@@ -1350,6 +1434,10 @@ a.sale-queue:hover {
     height: 110px;
     object-fit: cover;
     border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.6);
+}
+.sale-card:hover img {
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 0 28px rgba(255, 182, 213, 0.95), 0 0 44px rgba(255, 105, 180, 0.9);
 }
 .sale-info {
     flex: 1;
@@ -1403,6 +1491,10 @@ a.sale-queue:hover {
     height: 130px;
     object-fit: cover;
     border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 0 12px rgba(255, 182, 213, 0.6);
+}
+.queue-card:hover img {
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 0 28px rgba(255, 182, 213, 0.95), 0 0 44px rgba(255, 105, 180, 0.9);
 }
 .queue-name {
     font-weight: bold;
@@ -1548,14 +1640,61 @@ a.sale-queue:hover {
     .market-card img,
     .fashion-card img {
         height: auto;
-        max-height: 260px;
+        aspect-ratio: 3 / 4;
     }
     .sale-card,
     .friends-page-card,
     .queue-card,
     .queue-row {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+    }
+    .sale-card {
+        text-align: center;
+        align-items: center;
+    }
+    .sale-card img {
+        margin: 0 auto;
+    }
+    .sale-info {
+        width: 100%;
+        text-align: center;
+    }
+    .queue-card,
+    .queue-row {
+        text-align: center;
+        align-items: center;
+    }
+    .queue-card img,
+    .queue-row img {
+        margin: 0 auto;
+    }
+    .queue-bidder {
+        width: 100%;
+        text-align: center;
+    }
+    .queue-page .section-title {
+        text-align: center;
+    }
+    .upload-page .section-title {
+        text-align: center;
+    }
+    .upload-page .auth-form button {
+        align-self: center;
+    }
+    .sale-page .section-title {
+        text-align: center;
+    }
+    .friends-page-card,
+    .friends-request-card {
+        text-align: center;
+        align-items: center;
+    }
+    .friends-request-card img {
+        margin: 0 auto;
+    }
+    .friends-page-info {
+        text-align: center;
     }
     .sale-card img,
     .friends-page-card img,
@@ -1564,6 +1703,33 @@ a.sale-queue:hover {
         width: 100%;
         height: auto;
         max-width: 260px;
+    }
+    .friends-page-card,
+    .friends-request-card {
+        gap: 10px;
+    }
+    .friends-request-card {
+        flex-direction: column;
+        align-items: stretch;
+        min-height: 0;
+    }
+    .friends-request-actions {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+        margin-left: 0;
+    }
+    .friends-request-accept,
+    .friends-request-decline,
+    .friends-page-remove,
+    .friends-page-link,
+    .friends-page-add {
+        width: 100%;
+        min-width: 0;
+        text-align: center;
+    }
+    .friends-page-info {
+        width: 100%;
     }
     .bid-box {
         flex-direction: column;
@@ -1584,6 +1750,31 @@ a.sale-queue:hover {
     .login-signup-container {
         margin-top: 60px;
     }
+    .home-page .login-signup-container {
+        padding: 16px 12px;
+    }
+    .welcome-subtitle {
+        margin-top: 28px;
+    }
+    .welcome-under-2,
+    .welcome-under-3 {
+        width: min(180px, 70vw);
+    }
+    .login-signup-container .options {
+        margin-bottom: 40px;
+        gap: 8px;
+    }
+    .login-signup-container button {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+    .auth-card {
+        width: min(420px, 94vw);
+        padding: 16px;
+    }
+    .auth-form {
+        gap: 8px;
+    }
 }
 .login-signup-container button,
 .auth-form button,
@@ -1600,4 +1791,29 @@ a.sale-queue:hover {
 .sale-card button,
 .friends-page-card button {
     font-family: var(--button-font);
+}
+
+/* Extra sparkle for headers/titles across pages */
+.section-title,
+.friends-title,
+.profile-page .sidebar h2,
+.login-page h2,
+.signup-page h2,
+.upload-page .section-title,
+.shopping-page .section-title,
+.fashion-page .section-title,
+.sale-page .section-title,
+.queue-page .section-title,
+.friends-page .section-title,
+.profile-page .section-title {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.95),
+                 0 0 24px rgba(255, 255, 255, 0.95),
+                 0 0 42px rgba(255, 255, 255, 0.9),
+                 0 0 64px rgba(255, 255, 255, 0.85);
+    animation: header-sparkle-white 3.2s infinite;
+}
+
+/* Keep broken LED flicker on the Home title */
+.home-page .welcome-name {
+    animation: neon-flicker 3.2s infinite, header-sparkle 3.2s infinite;
 }
