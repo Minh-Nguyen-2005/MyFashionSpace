@@ -1164,7 +1164,7 @@ a.sale-queue:hover {
 .home-page .site-credit,
 .login-page .site-credit,
 .signup-page .site-credit {
-    position: absolute;
+    position: fixed;
     right: 12px;
     bottom: 10px;
     font-size: clamp(0.6rem, 1.8vw, 0.85rem);

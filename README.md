@@ -238,6 +238,8 @@ Example prompt and adaptation:
 
 ## Future Plans
 
+Implement Payment System.
+
 Incorporate and API-serve AI/ML vision model in classifying fashion (i.e., clothes, jewelry, heels, bags, etc.) vs. non-fashion (tomatoes, pans, toothpaste, books, phones, etc.) items uploaded to the space to detect and prevent trades that go against the website's theme and purpose.
 
 ---
